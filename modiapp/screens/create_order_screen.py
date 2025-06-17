@@ -1,14 +1,22 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QScrollArea, QPushButton, 
                              QHBoxLayout, QLabel, QGroupBox, QGridLayout,
                              QLineEdit, QDateEdit, QRadioButton, QTextEdit, QFrame,
-                             QComboBox, QCheckBox, QButtonGroup, QTableWidget, QHeaderView, QTableWidgetItem)
+                             QComboBox, QCheckBox, QButtonGroup, QTableWidget, QHeaderView, QTableWidgetItem, QMessageBox)
 from PySide6.QtSvgWidgets import QSvgWidget
 from PySide6.QtGui import QPixmap, QValidator
-from PySide6.QtCore import Qt, QDate
+from PySide6.QtCore import Qt, QDate, Signal
 
 class CreateOrderScreen(QWidget):
-    def __init__(self):
+    order_created = Signal()  # Signal to notify when an order is created
+
+    def __init__(self, db):
         super().__init__()
+        self.db = db
+        self.setWindowTitle("Crear Orden")
+        self.resize(1200, 800)
+        
+        # Get next order number
+        self.order_number = self.db.get_next_order_number()
         
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
@@ -25,6 +33,7 @@ class CreateOrderScreen(QWidget):
         header_layout.addStretch()
 
         self.back_button = QPushButton("← Atras")
+        self.back_button.clicked.connect(self.close)
         header_layout.addWidget(self.back_button)
         main_layout.addWidget(header_widget)
 
@@ -87,9 +96,13 @@ class CreateOrderScreen(QWidget):
         camisa_layout.addLayout(medidas_camisa_layout)
 
         fields = ["Cuello", "Espalda", "Hombro", "Manga x Cont.", "Largo", "Cont. manga", "Pecho", "Cintura", "Cadera"]
+        self.camisa_measure_edits = {}
         for i, field in enumerate(fields):
             medidas_camisa_layout.addWidget(QLabel(field), 0, i)
-            medidas_camisa_layout.addWidget(QLineEdit(), 1, i)
+            edit = QLineEdit()
+            medidas_camisa_layout.addWidget(edit, 1, i)
+            field_name = field.lower().replace(' ', '_').replace('.', '').replace('x', 'por')
+            self.camisa_measure_edits[field] = edit
 
         # Modelos
         modelos_layout = QHBoxLayout()
@@ -249,132 +262,149 @@ class CreateOrderScreen(QWidget):
         # Estado inicial
         rb_no_bolsillo.setChecked(True)
 
-        # --- Puño y Cuello ---
+        # --- Modelo Puño y Cuello Layout ---
         puño_cuello_layout = QHBoxLayout()
-        camisa_layout.addLayout(puño_cuello_layout)
 
         # --- Modelo Puño ---
         puño_group = QGroupBox("Modelo Puño")
-        puño_cuello_layout.addWidget(puño_group)
-        puño_main_layout = QHBoxLayout(puño_group)
+        puño_group.setStyleSheet("""
+            QGroupBox { 
+                background-color: #3C3C3C; 
+                color: white; 
+                border: 1px solid #555; 
+                border-radius: 5px; 
+                margin-top: 1ex;
+            }
+            QGroupBox::title { 
+                subcontrol-origin: margin; 
+                subcontrol-position: top center; 
+                padding: 0 3px; 
+            }
+        """)
+        puño_main_layout = QHBoxLayout()
         
-        self.textura_puno_button_group = QButtonGroup()
+        # Textura Puño
         textura_puño_layout = QVBoxLayout()
         textura_puño_layout.addWidget(QLabel("TEXTURA"))
-
-        rb_rigido = QRadioButton("Rígido")
-        self.textura_puno_button_group.addButton(rb_rigido)
-        textura_puño_layout.addWidget(rb_rigido)
-
-        rb_normal = QRadioButton("Normal")
-        self.textura_puno_button_group.addButton(rb_normal)
-        textura_puño_layout.addWidget(rb_normal)
-
-        rb_suave = QRadioButton("Suave")
-        self.textura_puno_button_group.addButton(rb_suave)
-        textura_puño_layout.addWidget(rb_suave)
-
+        self.textura_puno_button_group = QButtonGroup()
+        for text in ["Rígido", "Normal", "Suave"]:
+            rb = QRadioButton(text)
+            rb.setStyleSheet("color: white;")
+            self.textura_puno_button_group.addButton(rb)
+            textura_puño_layout.addWidget(rb)
         textura_puño_layout.addStretch()
         puño_main_layout.addLayout(textura_puño_layout)
 
-        line_puño = QFrame()
-        line_puño.setFrameShape(QFrame.VLine)
-        line_puño.setFrameShadow(QFrame.Sunken)
-        puño_main_layout.addWidget(line_puño)
-
-        self.modelo_puno_button_group = QButtonGroup()
+        # Modelos de Puño
         puño_grid_layout = QGridLayout()
-        puño_main_layout.addLayout(puño_grid_layout)
-
+        self.modelo_puno_button_group = QButtonGroup()
+        
         puno_options = [
             ("RD.svg", "R.D", 0, 0), ("RA.svg", "R.A", 0, 1), ("PUNTA.svg", "PUNTA", 0, 2),
-            ("D USO.svg", "D.USO", 1, 0), ("RA2B.svg", "R.A.2B", 1, 1), ("MAN.svg", "MAN", 1, 2),
-            (None, "DISEÑO", 2, 0), (None, "MANGA\nCORTA", 2, 2)
+            ("D USO.svg", "D.USO", 1, 0), ("RA2B.svg", "R.A.2B", 1, 1), ("MAN.svg", "MAN", 1, 2)
         ]
 
         for img_file, text, row, col in puno_options:
-            option_container = QWidget()
-            option_layout = QVBoxLayout(option_container)
-            option_layout.setContentsMargins(0, 0, 0, 0)
-            option_layout.setSpacing(5)
+            container = self.create_svg_radio_button(f"docs/svgs/Modelo Puño/{img_file}", text, self.modelo_puno_button_group)
+            puño_grid_layout.addWidget(container, row, col)
 
-            if img_file:
-                image_widget = QSvgWidget(f"docs/svgs/Modelo Puño/{img_file}")
-                image_widget.setFixedSize(80, 60)
-            else:
-                image_widget = QLabel(text)
-                image_widget.setFixedSize(60, 60)
-                image_widget.setStyleSheet("border: 1px solid black;")
-                image_widget.setAlignment(Qt.AlignCenter)
-            
-            radio_button = QRadioButton(text)
-            self.modelo_puno_button_group.addButton(radio_button)
+        # Botones especiales
+        diseño_container = self.create_special_button("DISEÑO", self.modelo_puno_button_group)
+        puño_grid_layout.addWidget(diseño_container, 2, 0)
+        
+        self.ancho_input = QLineEdit()
+        self.ancho_input.setPlaceholderText("ANCHO CMS.")
+        self.ancho_input.setStyleSheet("background-color: white; color: black;")
+        puño_grid_layout.addWidget(self.ancho_input, 2, 1)
 
-            option_layout.addWidget(image_widget, alignment=Qt.AlignCenter)
-            option_layout.addWidget(radio_button, alignment=Qt.AlignCenter)
-
-            puño_grid_layout.addWidget(option_container, row, col)
-
-        puño_grid_layout.addWidget(QLineEdit("ANCHO CMS."), 2, 1)
+        manga_container = self.create_special_button("MANGA\nCORTA", self.modelo_puno_button_group)
+        puño_grid_layout.addWidget(manga_container, 2, 2)
+        
+        puño_main_layout.addLayout(puño_grid_layout)
+        puño_group.setLayout(puño_main_layout)
+        puño_cuello_layout.addWidget(puño_group)
 
         # --- Modelo Cuello ---
         cuello_group = QGroupBox("Modelo Cuello")
-        puño_cuello_layout.addWidget(cuello_group)
+        cuello_group.setStyleSheet("""
+            QGroupBox { 
+                background-color: #3C3C3C; 
+                color: white; 
+                border: 1px solid #555; 
+                border-radius: 5px; 
+                margin-top: 1ex;
+            }
+            QGroupBox::title { 
+                subcontrol-origin: margin; 
+                subcontrol-position: top center; 
+                padding: 0 3px; 
+            }
+        """)
         cuello_main_layout = QHBoxLayout(cuello_group)
 
-        # --- Textura Section ---
-        self.textura_cuello_button_group = QButtonGroup()
+        # Textura Cuello
         textura_cuello_layout = QVBoxLayout()
         textura_cuello_layout.addWidget(QLabel("TEXTURA"))
+        self.textura_cuello_button_group = QButtonGroup()
         for text in ["Rígido", "Normal", "Suave"]:
             rb = QRadioButton(text)
+            rb.setStyleSheet("color: white;")
             self.textura_cuello_button_group.addButton(rb)
             textura_cuello_layout.addWidget(rb)
         textura_cuello_layout.addStretch()
         cuello_main_layout.addLayout(textura_cuello_layout)
 
-        line_cuello = QFrame()
-        line_cuello.setFrameShape(QFrame.VLine)
-        line_cuello.setFrameShadow(QFrame.Sunken)
-        cuello_main_layout.addWidget(line_cuello)
-
-        # --- Modelos Section ---
-        self.modelo_cuello_button_group = QButtonGroup()
+        # Modelos de Cuello y otras opciones
         modelos_cuello_layout = QVBoxLayout()
-        cuello_main_layout.addLayout(modelos_cuello_layout)
-
+        
         cuello_grid_layout = QGridLayout()
+        self.modelo_cuello_button_group = QButtonGroup()
+
+        # Columna 1 de modelos
+        cuello_options_col1 = ["Pegasso", "Valentino C", "Crown", "Givenchy", "Pajarito"]
+        for row, text in enumerate(cuello_options_col1):
+            rb = QRadioButton(text)
+            rb.setStyleSheet("color: white;")
+            self.modelo_cuello_button_group.addButton(rb)
+            cuello_grid_layout.addWidget(rb, row, 0)
+
+        # Columna 2 de modelos
+        cuello_options_col2 = ["Valentino L", "Neru", "Royal"]
+        for row, text in enumerate(cuello_options_col2):
+            rb = QRadioButton(text)
+            rb.setStyleSheet("color: white;")
+            self.modelo_cuello_button_group.addButton(rb)
+            cuello_grid_layout.addWidget(rb, row, 1)
+
         modelos_cuello_layout.addLayout(cuello_grid_layout)
 
-        simple_cuello_options = [
-            "Pegasso", "Valentino C", "Crown", "Givenchy", "Pajarito",
-            "Valentino L", "Neru", "Royal"
-        ]
-        for i, option_text in enumerate(simple_cuello_options):
-            rb = QRadioButton(option_text)
-            self.modelo_cuello_button_group.addButton(rb)
-            cuello_grid_layout.addWidget(rb, i % 5, i // 5)
+        # Opción "OTRO - CUAL?"
+        otro_layout = QHBoxLayout()
+        self.rb_otro_cuello = QRadioButton("OTRO - CUAL?")
+        self.rb_otro_cuello.setStyleSheet("color: white;")
+        self.modelo_cuello_button_group.addButton(self.rb_otro_cuello)
+        otro_layout.addWidget(self.rb_otro_cuello)
 
-        # --- Otro Section ---
-        otro_widget = QWidget()
-        otro_layout = QHBoxLayout(otro_widget)
-        otro_layout.setContentsMargins(0,0,0,0)
-        rb_otro = QRadioButton("OTRO - CUAL?")
-        self.modelo_cuello_button_group.addButton(rb_otro)
-        otro_layout.addWidget(rb_otro)
-
-        otro_line_edit = QLineEdit()
-        otro_line_edit.setPlaceholderText("Especificar otro modelo")
-        otro_line_edit.setEnabled(False)
-        rb_otro.toggled.connect(otro_line_edit.setEnabled)
-        otro_layout.addWidget(otro_line_edit)
-        modelos_cuello_layout.addWidget(otro_widget)
-
-        # --- Independent Collar Options ---
+        self.otro_cuello_input = QLineEdit()
+        self.otro_cuello_input.setStyleSheet("background-color: white; color: black;")
+        self.otro_cuello_input.setPlaceholderText("Especificar otro modelo")
+        self.otro_cuello_input.setEnabled(False)  # Deshabilitado por defecto
+        otro_layout.addWidget(self.otro_cuello_input)
+        
+        self.rb_otro_cuello.toggled.connect(self.otro_cuello_input.setEnabled)
+        
+        modelos_cuello_layout.addLayout(otro_layout)
+        
+        # Separador
         line = QFrame()
         line.setFrameShape(QFrame.HLine)
         line.setFrameShadow(QFrame.Sunken)
         modelos_cuello_layout.addWidget(line)
+
+        cuello_main_layout.addLayout(modelos_cuello_layout)
+        puño_cuello_layout.addWidget(cuello_group)
+        
+        camisa_layout.addLayout(puño_cuello_layout)
 
         independent_options_layout = QGridLayout()
         modelos_cuello_layout.addLayout(independent_options_layout)
@@ -484,28 +514,50 @@ class CreateOrderScreen(QWidget):
         billing_section = self.create_billing_section()
         content_layout.addWidget(billing_section)
 
-    def _create_image_option(self, text, image_path, button_group):
-        option_container = QWidget()
-        option_layout = QVBoxLayout(option_container)
-        option_layout.setContentsMargins(0, 0, 0, 0)
-        option_layout.setSpacing(5)
+        # Update the order number label
+        self.order_number_label = QLabel(f"Ferdinand N° {self.order_number}")
+        content_layout.addWidget(self.order_number_label)
 
-        if image_path:
-            image_widget = QSvgWidget(image_path)
-            image_widget.setFixedSize(100, 100)
-        else:
-            image_widget = QLabel(text.replace("\\n", "\n"))
-            image_widget.setFixedSize(100, 100)
-            image_widget.setStyleSheet("border: 1px solid black;")
-            image_widget.setAlignment(Qt.AlignCenter)
+        # Add save button
+        save_button = QPushButton("Guardar Orden")
+        save_button.clicked.connect(self.save_order)
+        content_layout.addWidget(save_button)
 
+    def create_svg_radio_button(self, svg_path, text, button_group):
+        container = QWidget()
+        layout = QVBoxLayout(container)
+        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setSpacing(5)
+
+        image_widget = QSvgWidget(svg_path)
+        image_widget.setFixedSize(80, 60)
+        
         radio_button = QRadioButton(text)
-        if button_group:
-            button_group.addButton(radio_button)
+        radio_button.setStyleSheet("color: white;")
+        button_group.addButton(radio_button)
 
-        option_layout.addWidget(image_widget, alignment=Qt.AlignCenter)
-        option_layout.addWidget(radio_button, alignment=Qt.AlignCenter)
-        return option_container
+        layout.addWidget(image_widget, alignment=Qt.AlignCenter)
+        layout.addWidget(radio_button, alignment=Qt.AlignCenter)
+        return container
+
+    def create_special_button(self, text, button_group):
+        container = QWidget()
+        layout = QVBoxLayout(container)
+        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setSpacing(5)
+
+        label = QLabel(text)
+        label.setFixedSize(80, 60)
+        label.setAlignment(Qt.AlignCenter)
+        label.setStyleSheet("border: 1px solid white; color: white;")
+        
+        radio_button = QRadioButton(text.replace("\n", " "))
+        radio_button.setStyleSheet("color: white;")
+        button_group.addButton(radio_button)
+
+        layout.addWidget(label, alignment=Qt.AlignCenter)
+        layout.addWidget(radio_button, alignment=Qt.AlignCenter)
+        return container
 
     def create_saco_section(self):
         saco_section_layout = QVBoxLayout()
@@ -561,7 +613,7 @@ class CreateOrderScreen(QWidget):
 
         solapa_options = ["Cuadrada", "En punta", "Redonda"]
         for i, opt_text in enumerate(solapa_options):
-            opt = self._create_image_option(opt_text, f"docs/svgs/Medidas Saco/Solapa/{opt_text}.svg", self.solapa_saco_group)
+            opt = self.create_svg_radio_button(f"docs/svgs/Medidas Saco/Solapa/{opt_text}.svg", opt_text, self.solapa_saco_group)
             solapa_layout.addWidget(opt, 0, i)
         
         solapa_layout.addWidget(QCheckBox("Ojal solapa"), 1, 0, 1, 3, Qt.AlignCenter)
@@ -582,7 +634,7 @@ class CreateOrderScreen(QWidget):
             ("3er\nBolsillo", "3er Bolsillo.svg")
         ]
         for i, (opt_text, img_file) in enumerate(bolsillo_inf_options):
-            opt = self._create_image_option(opt_text, f"docs/svgs/Medidas Saco/Bolsillo inferior/{img_file}", self.bolsillo_inf_saco_group)
+            opt = self.create_svg_radio_button(f"docs/svgs/Medidas Saco/Bolsillo inferior/{img_file}", opt_text, self.bolsillo_inf_saco_group)
             bolsillo_inf_layout.addWidget(opt, 0, i)
 
 
@@ -628,8 +680,8 @@ class CreateOrderScreen(QWidget):
         bolsillo_sup_options_container = QWidget()
         bolsillo_sup_options_layout = QHBoxLayout(bolsillo_sup_options_container)
 
-        aletilla_opt = self._create_image_option("ALETILLA", "docs/svgs/Medidas Saco/Bolsillo Superior/Aletilla.svg", self.bolsillo_sup_type_group)
-        parche_opt = self._create_image_option("PARCHE", "docs/svgs/Medidas Saco/Bolsillo Superior/Parche.svg", self.bolsillo_sup_type_group)
+        aletilla_opt = self.create_svg_radio_button("docs/svgs/Medidas Saco/Bolsillo Superior/Aletilla.svg", "ALETILLA", self.bolsillo_sup_type_group)
+        parche_opt = self.create_svg_radio_button("docs/svgs/Medidas Saco/Bolsillo Superior/Parche.svg", "PARCHE", self.bolsillo_sup_type_group)
         bolsillo_sup_options_layout.addWidget(aletilla_opt)
         bolsillo_sup_options_layout.addWidget(parche_opt)
         bolsillo_sup_layout.addWidget(bolsillo_sup_options_container)
@@ -748,7 +800,7 @@ class CreateOrderScreen(QWidget):
             ("Texas #10", "Texas 10.svg"),("Texas #11", "Texas 11.svg"),("Texas #12", "Texas 12.svg")
         ]
         for i, (text, svg) in enumerate(delantero_options):
-            opt = self._create_image_option(text, f"docs/svgs/Medidas Pantalon/Bolsillo Delantero/{svg}", self.bolsillo_del_group)
+            opt = self.create_svg_radio_button(f"docs/svgs/Medidas Pantalon/Bolsillo Delantero/{svg}", text, self.bolsillo_del_group)
             bolsillo_del_layout.addWidget(opt, i // 6, i % 6)
 
         # Bolsillo Trasero and Terminado Layout
@@ -764,7 +816,7 @@ class CreateOrderScreen(QWidget):
             ("Aletilla", "Aletilla.svg"),("Con Oreja", "Con oreja.svg")
         ]
         for i, (text, svg) in enumerate(trasero_options):
-            opt = self._create_image_option(text, f"docs/svgs/Medidas Pantalon/Bolsillo Trasero/{svg}", self.bolsillo_tras_group)
+            opt = self.create_svg_radio_button(f"docs/svgs/Medidas Pantalon/Bolsillo Trasero/{svg}", text, self.bolsillo_tras_group)
             bolsillo_tras_layout.addWidget(opt, i // 4, i % 4)
         
         terminado_group = QGroupBox("Terminado Bolsillo Trasero")
@@ -820,7 +872,7 @@ class CreateOrderScreen(QWidget):
             ("Cruzada\nRecta", "Cruzada recta.svg"), ("Cruzada\nPunta", "Cruzada punta.svg")
         ]
         for i, (text, svg) in enumerate(pretina_options):
-             opt = self._create_image_option(text, f"docs/svgs/Medidas Pantalon/Pretina/{svg}", self.pretina_modelos_group)
+             opt = self.create_svg_radio_button(f"docs/svgs/Medidas Pantalon/Pretina/{svg}", text, self.pretina_modelos_group)
              pretina_modelos_layout.addWidget(opt, 0, i)
         pretina_layout.addWidget(pretina_modelos_group)
         pretina_opts_group = QGroupBox()
@@ -1075,6 +1127,257 @@ class CreateOrderScreen(QWidget):
         abono = int(self.abono_edit.text()) if self.abono_edit.text() else 0
         saldo = valor - abono
         self.saldo_label.setText(f"$ {saldo:,}")
+
+    '''def save_order(self):
+        """Save the order to the database"""
+        try:
+            # Collect order data
+            order_data = {
+                'order_number': self.order_number,
+                'client_name': self.cliente_name_edit.text(),
+                'order_date': self.fecha_orden_edit.date().toString("yyyy-MM-dd"),
+                'delivery_date': self.fecha_entrega_edit.date().toString("yyyy-MM-dd"),
+                'order_value': int(self.valor_orden_edit.text()) if self.valor_orden_edit.text() else 0,
+                'deposit': int(self.abono_edit.text()) if self.abono_edit.text() else 0
+            }
+
+            # Collect all measurements and specifications
+            details_data = {
+                'camisa': self.collect_camisa_details(),
+                'saco': self.collect_saco_details(),
+                'pantalon': self.collect_pantalon_details()
+            }
+
+            # Collect references
+            references_data = []
+            for row in self.ref_rows:
+                ref_edit = row.layout().itemAt(0).widget()
+                color_edit = row.layout().itemAt(1).widget()
+                valor_edit = row.layout().itemAt(2).widget()
+                
+                if ref_edit.text() and color_edit.text() and valor_edit.text():
+                    references_data.append({
+                        'reference': ref_edit.text(),
+                        'color': color_edit.text(),
+                        'value': int(valor_edit.text())
+                    })
+
+            # Save to database
+            if self.db.create_order(order_data, details_data, references_data):
+                QMessageBox.information(self, "Éxito", "Orden guardada correctamente")
+                self.order_created.emit()
+                self.close()
+            else:
+                QMessageBox.critical(self, "Error", "Error al guardar la orden")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error al guardar la orden: {str(e)}")'''
+    '''
+    def collect_camisa_details(self):
+        """Collect all camisa measurements and specifications"""
+        details = {}
+        
+        # Collect measurements
+        for i, field in enumerate(["Cuello", "Espalda", "Hombro", "Manga x Cont.", "Largo", 
+                                 "Cont. manga", "Pecho", "Cintura", "Cadera"]):
+            edit = self.findChild(QLineEdit, f"camisa_{field.lower().replace(' ', '_')}")
+            if edit:
+                details[field] = edit.text()
+
+        # Collect model selections
+        if self.espalda_button_group.checkedButton():
+            details['Modelo Espalda'] = self.espalda_button_group.checkedButton().text()
+        
+        if self.modelo_bolsillo_button_group.checkedButton():
+            details['Modelo Bolsillo'] = self.modelo_bolsillo_button_group.checkedButton().text()
+        
+        if self.modelo_puno_button_group.checkedButton():
+            details['Modelo Puño'] = self.modelo_puno_button_group.checkedButton().text()
+        
+        if self.modelo_cuello_button_group.checkedButton():
+            details['Modelo Cuello'] = self.modelo_cuello_button_group.checkedButton().text()
+
+        # Guardar valores de puño
+        if self.textura_puno_button_group.checkedButton():
+            details['camisa']['textura_puño'] = self.textura_puno_button_group.checkedButton().text()
+        if self.modelo_puno_button_group.checkedButton():
+            details['camisa']['modelo_puño'] = self.modelo_puno_button_group.checkedButton().text()
+        
+        # Guardar valores de cuello
+        if self.textura_cuello_button_group.checkedButton():
+            details['camisa']['textura_cuello'] = self.textura_cuello_button_group.checkedButton().text()
+        if self.modelo_cuello_button_group.checkedButton():
+            modelo_cuello = self.modelo_cuello_button_group.checkedButton().text()
+            if modelo_cuello == "OTRO - CUAL?":
+                if hasattr(self, 'otro_cuello_input'):
+                    modelo_cuello = self.otro_cuello_input.text()
+            details['camisa']['modelo_cuello'] = modelo_cuello
+        if self.plum_cuello_group.checkedButton():
+            details['camisa']['plum'] = self.plum_cuello_group.checkedButton().text()
+        if self.bd_cuello_group.checkedButton():
+            details['camisa']['bottom_down'] = self.bd_cuello_group.checkedButton().text()
+
+        return details
+        '''
+
+    def save_order(self):
+        """Save the order to the database"""
+        try:
+            # Collect order data
+            order_data = {
+                'order_number': self.order_number,
+                'client_name': self.cliente_name_edit.text(),
+                'order_date': self.fecha_orden_edit.date().toString("yyyy-MM-dd"),
+                'delivery_date': self.fecha_entrega_edit.date().toString("yyyy-MM-dd"),
+                'status': 'Pendiente',  # Estado por defecto
+                'order_value': int(self.valor_orden_edit.text()) if self.valor_orden_edit.text() else 0,
+                'deposit': int(self.abono_edit.text()) if self.abono_edit.text() else 0,
+                # Agregar campos adicionales requeridos por la DB
+                'vendedor': '',  # Se debe agregar campo en la UI
+                'observaciones': ''  # Se debe agregar campo en la UI
+            }
+
+            # Collect all measurements and specifications
+            details_data = {
+                'camisa': self.collect_camisa_details(),
+                'saco': self.collect_saco_details(),
+                'pantalon': self.collect_pantalon_details()
+            }
+
+            # Collect references
+            references = []
+            for row in self.ref_rows:
+                ref_edit = row.layout().itemAt(0).widget()
+                color_edit = row.layout().itemAt(1).widget()
+                valor_edit = row.layout().itemAt(2).widget()
+                
+                if ref_edit.text() and color_edit.text() and valor_edit.text():
+                    references.append({
+                        'reference': ref_edit.text(),
+                        'color': color_edit.text(),
+                        'value': int(valor_edit.text())
+                    })
+
+            # Paquete de datos completo para la DB
+            db_data = {
+                'order_data': order_data,
+                'details': details_data,
+                'references': references
+            }
+
+            # Save to database
+            if self.db.create_order(db_data):
+                QMessageBox.information(self, "Éxito", "Orden guardada correctamente")
+                self.order_created.emit()
+                self.close()
+            else:
+                QMessageBox.critical(self, "Error", "Error al guardar la orden")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error al guardar la orden: {str(e)}")
+            import traceback
+            traceback.print_exc()  # Para depuración
+    
+    def collect_camisa_details(self):
+        """Collect all camisa measurements and specifications"""
+        details = {}
+        #1. Recopilar medidas usando las referencias almacenadas
+        for field_name, edit in self.camisa_measure_edits.items():
+            details[field_name] = edit.text()
+        
+        #2 Recopilar selecciones de modelos
+        if self.espalda_button_group.checkedButton():
+            details['modelo_espalda'] = self.espalda_button_group.checkedButton().text()
+
+        if self.modelo_bolsillo_button_group.checkedButton():
+            modelo = self.modelo_bolsillo_button_group.checkedButton().text()
+            details['modelo_bolsillo'] = modelo
+
+            #Solo guardar lado y cantidad si NO está seleccionado
+            if modelo != "NO":
+                if self.lado_bolsillo_group.checkedButton():
+                    details['lado_bolsillo'] = self.lado_bolsillo_group.checkedButton().text()
+                details['cantidad_bolsillo'] = self.cantidad_bolsillo_edit.text()
+        
+        #3. Modelo y textura del puño
+        if self.modelo_puno_button_group.checkedButton():
+            details['modelo_puno'] = self.modelo_puno_button_group.checkedButton().text()
+        
+        if self.textura_puno_button_group.checkedButton():
+            details['textura_puno'] = self.textura_puno_button_group.checkedButton().text()
+        
+        #4. Modelo y textura del cuello
+        if self.modelo_cuello_button_group.checkedButton():
+            modelo = self.modelo_cuello_button_group.checkedButton().text()
+            if modelo == "OTRO - CUAL?" and self.otro_cuello_input.text():
+                details['modelo_cuello'] = self.otro_cuello_input.text()
+            else:
+                details['modelo_cuello'] = modelo
+        
+        if self.textura_cuello_button_group.checkedButton():
+            details['textura_cuello'] = self.textura_cuello_button_group.checkedButton().text()
+            
+        # 5. Opciones adicionales de cuello
+        if self.plum_cuello_group.checkedButton():
+            details['plum_cuello'] = self.plum_cuello_group.checkedButton().text()
+        
+        if self.bd_cuello_group.checkedButton():
+            details['bottom_down_cuello'] = self.bd_cuello_group.checkedButton().text()
+        
+        return details
+
+
+    def collect_saco_details(self):
+        """Collect all saco measurements and specifications"""
+        details = {}
+        
+        # Collect measurements
+        for i, field in enumerate(["Talle", "Largo", "1/2 Espalda", "Hombro", "Manga", 
+                                 "Pecho", "Cintura", "Cadera"]):
+            edit = self.findChild(QLineEdit, f"saco_{field.lower().replace(' ', '_')}")
+            if edit:
+                details[field] = edit.text()
+
+        # Collect model selections
+        if self.estilo_saco_group.checkedButton():
+            details['Estilo'] = self.estilo_saco_group.checkedButton().text()
+        
+        if self.solapa_saco_group.checkedButton():
+            details['Solapa'] = self.solapa_saco_group.checkedButton().text()
+        
+        if self.bolsillo_inf_saco_group.checkedButton():
+            details['Bolsillo Inferior'] = self.bolsillo_inf_saco_group.checkedButton().text()
+        
+        if self.delantero_group.checkedButton():
+            details['Delantero'] = self.delantero_group.checkedButton().text()
+        
+        if self.abertura_group.checkedButton():
+            details['Abertura'] = self.abertura_group.checkedButton().text()
+
+        return details
+
+    def collect_pantalon_details(self):
+        """Collect all pantalon measurements and specifications"""
+        details = {}
+        
+        # Collect measurements
+        for i, field in enumerate(["Cintura", "Base", "Largo", "Pierna", "Rodilla", 
+                                 "Bota", "Tiro", "CONT. T"]):
+            edit = self.findChild(QLineEdit, f"pantalon_{field.lower().replace(' ', '_')}")
+            if edit:
+                details[field] = edit.text()
+
+        # Collect model selections
+        if self.bolsillo_del_group.checkedButton():
+            details['Bolsillo Delantero'] = self.bolsillo_del_group.checkedButton().text()
+        
+        if self.bolsillo_tras_group.checkedButton():
+            details['Bolsillo Trasero'] = self.bolsillo_tras_group.checkedButton().text()
+        
+        if self.pretina_modelos_group.checkedButton():
+            details['Pretina'] = self.pretina_modelos_group.checkedButton().text()
+
+        return details
 
 class QIntValidator(QValidator):
     def validate(self, input, pos):

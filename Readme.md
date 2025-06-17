@@ -1,82 +1,104 @@
-------
+# Ferdinand - Sistema de Gestión de Órdenes
 
-# 🧵 Modi App
+Sistema de gestión de órdenes para la sastrería Ferdinand.
 
-Aplicación de escritorio para la gestión de órdenes de productos textiles.
+## Requisitos
 
-## 📁 Estructura del Proyecto
+- Python 3.8 o superior
+- PySide6
+- PyInstaller (para crear el ejecutable)
 
-```
-modi-app/
-├── assets/                   # Recursos estáticos (SVG, íconos, logos)
-│   ├── icons/
-│   ├── svgs/                 # Subcarpetas por categoría: /shirt, /pants, etc.
-│   └── logo.png
-├── data/
-│   ├── database.py           # Conexión a SQLite y queries
-│   └── models.py             # Clases Pydantic/SQLModel para órdenes
-├── screens/                  # Pantallas de la aplicación
-│   ├── __init__.py
-│   ├── base_screen.py        # Clase base para pantallas
-│   ├── dashboard.py          # Listado de órdenes con búsqueda
-│   ├── order/
-│   │   ├── create.py         # Pantalla de creación
-│   │   ├── edit.py           # Edición de orden
-│   │   └── view.py           # Vista detallada (para PDF)
-│   └── components/           # Componentes reutilizables
-│       ├── header.py         # Encabezado con logo y botón "Atrás"
-│       ├── order_card.py     # Tarjeta de orden para el dashboard
-│       └── pdf_exporter.py   # Lógica de generación de PDF
-├── utils/
-│   ├── helpers.py            # Funciones auxiliares (solo si necesario)
-│   └── constants.py          # Constantes (colores, rutas)
-├── main.py                   # Punto de entrada
-└── requirements.txt          # Dependencias
+## Instalación
+
+1. Clonar el repositorio:
+```bash
+git clone https://github.com/tu-usuario/ferdinand.git
+cd ferdinand
 ```
 
-## 🛠️ Tecnologías y Librerías
-
-* **Python**
-* **FPDF2**
-* **PySide6**
-* **pyinstaller**
-* **SQLite3**
-
-## 🧪 Instalación
-
-### 1. Crear entorno virtual
-
+2. Crear un entorno virtual:
 ```bash
 python -m venv venv
 ```
 
-### 2. Permitir scripts de PowerShell
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+3. Activar el entorno virtual:
+- Windows:
+```bash
+venv\Scripts\activate
+```
+- Linux/Mac:
+```bash
+source venv/bin/activate
 ```
 
-## ▶️ Ejecutar la aplicación
-
-### 1. Activar entorno virtual
-Cambiar por backslash
-
-```powershell
-./venv/Scripts/Activate.ps1
+4. Instalar dependencias:
+```bash
+pip install -r requirements.txt
 ```
 
-### 2. Ejecutar la app
+## Ejecución
+
+### Modo Desarrollo
+
+Para ejecutar la aplicación en modo desarrollo:
 
 ```bash
 python modiapp/main.py
 ```
 
----
+### Crear Ejecutable
 
-## 📜 Licencia y Créditos
+Para crear un ejecutable de la aplicación:
+
+```bash
+pyinstaller modiapp.spec
+```
+
+El ejecutable se creará en la carpeta `dist`.
+
+## Estructura del Proyecto
+
+```
+ferdinand/
+├── modiapp/
+│   ├── assets/         # Imágenes y recursos
+│   ├── screens/        # Pantallas de la aplicación
+│   ├── database.py     # Módulo de base de datos
+│   └── main.py         # Punto de entrada
+├── docs/
+│   └── svgs/          # Archivos SVG para los modelos
+├── data/              # Base de datos SQLite
+├── requirements.txt   # Dependencias
+└── modiapp.spec      # Configuración de PyInstaller
+```
+
+## Características
+
+- Gestión de órdenes de sastrería
+- Medidas para camisas, sacos y pantalones
+- Selección de modelos con visualización SVG
+- Sistema de referencias y valores
+- Base de datos SQLite para persistencia
+- Interfaz gráfica moderna y fácil de usar
+
+## Base de Datos
+
+La aplicación utiliza SQLite como base de datos. Los datos se almacenan en el archivo `data/orders.db`. La estructura incluye:
+
+- Tabla `orders`: Información principal de las órdenes
+- Tabla `order_details`: Detalles y medidas de cada orden
+- Tabla `order_references`: Referencias y valores de cada orden
+
+## Contribuir
+
+1. Fork el repositorio
+2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir un Pull Request
 
 Desarrollado por **ElDanissito**  
 Contribuciones por **LJuandalZPH**  
 Licencia: MIT
 
----
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.

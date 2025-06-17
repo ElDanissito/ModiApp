@@ -1,41 +1,39 @@
 import sys
 import os
+from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from screens.dashboard_screen import DashboardScreen
+from database import Database
 
-# Add the project root to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QStackedWidget
-from modiapp.screens.dashboard_screen import DashboardScreen
-# We will create this file in the next step
-from modiapp.screens.create_order_screen import CreateOrderScreen
+    return os.path.join(base_path, relative_path)
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Ferdinand")
-        self.resize(1200, 800)
-
-        self.stacked_widget = QStackedWidget()
-        self.setCentralWidget(self.stacked_widget)
-
-        self.dashboard_screen = DashboardScreen()
-        self.dashboard_screen.crear_button.clicked.connect(self.show_create_order_screen)
+class MainWindow(QApplication):
+    def __init__(self, argv):
+        super().__init__(argv)
         
-        self.create_order_screen = CreateOrderScreen()
-        self.create_order_screen.back_button.clicked.connect(self.show_dashboard_screen)
+        # Initialize database
+        self.db = Database()
+        
+        # Set application icon
+        self.setWindowIcon(QIcon(resource_path("modiapp/assets/Logo.png")))
+        
+        # Create and show dashboard
+        self.dashboard = DashboardScreen(self.db)
+        self.dashboard.showMaximized()
 
-        self.stacked_widget.addWidget(self.dashboard_screen)
-        self.stacked_widget.addWidget(self.create_order_screen)
-
-    def show_create_order_screen(self):
-        self.stacked_widget.setCurrentWidget(self.create_order_screen)
-
-    def show_dashboard_screen(self):
-        self.stacked_widget.setCurrentWidget(self.dashboard_screen)
-
+def main():
+    app = MainWindow(sys.argv)
+    sys.exit(app.exec())
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec()) 
+    main() 
