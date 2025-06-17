@@ -14,6 +14,6 @@
 <path d="M23 1V4V7V10L17 12.5V4L23.5 1H24" stroke="black"/>
 <path d="M9 50H16V52H9" stroke="black"/>
 <path d="M55 48H48V50H55" stroke="black"/>
-<circle cx="35" cy="52" r="1" fill="white" stroke="black"/>
-<circle cx="35" cy="58" r="1" fill="white" stroke="black"/>
+<circle cx="35" cy="52" r="1" stroke="black"/>
+<circle cx="35" cy="58" r="1" stroke="black"/>
 </svg>

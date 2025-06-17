@@ -11,8 +11,8 @@
 <path d="M41 1H24V4M41 1V4M41 1L47 4V12.5L41 10V7M41 4H24M41 4V7M24 4V7H41" stroke="black"/>
 <path d="M23 1V4V7V10L17 12.5V4L23.5 1H24" stroke="black"/>
 <path d="M9 50H16V52H9" stroke="black"/>
-<circle cx="35" cy="53" r="1" fill="white" stroke="black"/>
-<circle cx="35" cy="59" r="1" fill="white" stroke="black"/>
+<circle cx="35" cy="53" r="1" stroke="black"/>
+<circle cx="35" cy="59" r="1" stroke="black"/>
 <path d="M55 48H48V50H55" stroke="black"/>
 <path d="M9 72H24L31.5 64L39.5 72H55.5" stroke="black"/>
 <path d="M31.5 65L32 28" stroke="black"/>

@@ -648,6 +648,75 @@ class CreateOrderScreen(QWidget):
                 bolsillo_sup_options_container.setEnabled(False)
         self.bolsillo_sup_enable_group.buttonClicked.connect(toggle_bolsillo_sup)
 
+        # --- Modelo Chaleco ---
+        chaleco_group = QGroupBox("Modelo Chaleco")
+        saco_section_layout.addWidget(chaleco_group)
+        chaleco_layout = QHBoxLayout(chaleco_group)
+
+        # Left side - SVG and Yes/No
+        left_chaleco_layout = QVBoxLayout()
+        
+        # SVG visualization
+        svg_widget = QSvgWidget("docs/svgs/Medidas Saco/Modelo chaleco/Chaleco.svg")
+        svg_widget.setFixedSize(150, 150)
+        left_chaleco_layout.addWidget(svg_widget, alignment=Qt.AlignCenter)
+
+        # Yes/No radio buttons
+        self.chaleco_enable_group = QButtonGroup()
+        rb_si_chaleco = QRadioButton("SI")
+        rb_no_chaleco = QRadioButton("NO")
+        self.chaleco_enable_group.addButton(rb_si_chaleco)
+        self.chaleco_enable_group.addButton(rb_no_chaleco)
+        rb_no_chaleco.setChecked(True)
+
+        yes_no_layout = QHBoxLayout()
+        yes_no_layout.addWidget(rb_si_chaleco)
+        yes_no_layout.addWidget(rb_no_chaleco)
+        left_chaleco_layout.addLayout(yes_no_layout)
+
+        chaleco_layout.addLayout(left_chaleco_layout)
+
+        # Right side - Measurements and observations
+        right_chaleco_layout = QVBoxLayout()
+
+        # Measurements
+        medidas_chaleco_layout = QGridLayout()
+        medidas_chaleco_layout.addWidget(QLabel("Diagonal pecho"), 0, 0)
+        self.diagonal_pecho_edit = QLineEdit()
+        medidas_chaleco_layout.addWidget(self.diagonal_pecho_edit, 0, 1)
+        
+        medidas_chaleco_layout.addWidget(QLabel("Centro"), 1, 0)
+        self.centro_edit = QLineEdit()
+        medidas_chaleco_layout.addWidget(self.centro_edit, 1, 1)
+        
+        medidas_chaleco_layout.addWidget(QLabel("Largo Espalda"), 2, 0)
+        self.largo_espalda_edit = QLineEdit()
+        medidas_chaleco_layout.addWidget(self.largo_espalda_edit, 2, 1)
+
+        right_chaleco_layout.addLayout(medidas_chaleco_layout)
+
+        # Observations
+        obs_chaleco_layout = QVBoxLayout()
+        obs_chaleco_layout.addWidget(QLabel("Observaciones:"))
+        self.obs_chaleco_edit = QTextEdit()
+        obs_chaleco_layout.addWidget(self.obs_chaleco_edit)
+        right_chaleco_layout.addLayout(obs_chaleco_layout)
+
+        chaleco_layout.addLayout(right_chaleco_layout)
+
+        # Connect signals to enable/disable measurements and observations
+        def toggle_chaleco_options(button):
+            enabled = button.text() == "SI"
+            self.diagonal_pecho_edit.setEnabled(enabled)
+            self.centro_edit.setEnabled(enabled)
+            self.largo_espalda_edit.setEnabled(enabled)
+            self.obs_chaleco_edit.setEnabled(enabled)
+
+        self.chaleco_enable_group.buttonClicked.connect(toggle_chaleco_options)
+
+        # Initial state
+        toggle_chaleco_options(rb_no_chaleco)
+
         # --- Observaciones y Vendedor ---
         observaciones_group = QGroupBox("Observaciones")
         obs_layout = QVBoxLayout(observaciones_group)
@@ -892,34 +961,114 @@ class CreateOrderScreen(QWidget):
 
         # Financials
         financial_group = QGroupBox()
-        financial_layout = QGridLayout(financial_group)
-        financial_layout.addWidget(QLabel("VALOR ORDEN"), 0, 0); financial_layout.addWidget(QLabel("ABONO"), 0, 1); financial_layout.addWidget(QLabel("SALDO"), 0, 2)
-        self.valor_orden_edit = QLineEdit(); self.abono_edit = QLineEdit(); self.saldo_label = QLabel("$ 0")
+        financial_layout = QVBoxLayout(financial_group)
+        
+        # Top row with order value, deposit and balance
+        top_financial_layout = QHBoxLayout()
+        financial_layout.addLayout(top_financial_layout)
+        
+        # Order value, deposit and balance
+        values_layout = QGridLayout()
+        values_layout.addWidget(QLabel("VALOR ORDEN"), 0, 0)
+        values_layout.addWidget(QLabel("ABONO"), 0, 1)
+        values_layout.addWidget(QLabel("SALDO"), 0, 2)
+        self.valor_orden_edit = QLineEdit()
+        self.abono_edit = QLineEdit()
+        self.saldo_label = QLabel("$ 0")
         self.valor_orden_edit.setValidator(QIntValidator())
         self.abono_edit.setValidator(QIntValidator())
-        financial_layout.addWidget(self.valor_orden_edit, 1, 0); financial_layout.addWidget(self.abono_edit, 1, 1); financial_layout.addWidget(self.saldo_label, 1, 2, alignment=Qt.AlignCenter)
+        values_layout.addWidget(self.valor_orden_edit, 1, 0)
+        values_layout.addWidget(self.abono_edit, 1, 1)
+        values_layout.addWidget(self.saldo_label, 1, 2, alignment=Qt.AlignCenter)
+        top_financial_layout.addLayout(values_layout)
+        
+        # References section
+        ref_group = QGroupBox("Referencias")
+        ref_layout = QVBoxLayout(ref_group)
+        
+        # Header for references
+        ref_header_layout = QHBoxLayout()
+        ref_header_layout.addWidget(QLabel("Ref."), 1)
+        ref_header_layout.addWidget(QLabel("Color"), 2)
+        ref_header_layout.addWidget(QLabel("Valor"), 1)
+        ref_layout.addLayout(ref_header_layout)
+        
+        # Container for reference rows
+        self.ref_rows_layout = QVBoxLayout()
+        ref_layout.addLayout(self.ref_rows_layout)
+        
+        # Add initial reference rows
+        self.ref_rows = []
+        self.add_reference_row()
+        self.add_reference_row()
+        
+        # Add button for new references
+        add_ref_button = QPushButton("+")
+        add_ref_button.setFixedWidth(30)
+        add_ref_button.clicked.connect(self.add_reference_row)
+        ref_layout.addWidget(add_ref_button, alignment=Qt.AlignCenter)
+        
+        financial_layout.addWidget(ref_group)
+        
         top_row_layout.addWidget(financial_group)
         
         main_layout.addLayout(top_row_layout)
-        
-        # Reference Grid
-        ref_table = QTableWidget(6, 3)
-        ref_table.setHorizontalHeaderLabels(["Ref.", "Color", "Valor"])
-        ref_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        main_layout.addWidget(ref_table)
         
         # Connect signals
         self.cliente_name_edit.textChanged.connect(self.billing_cliente_label.setText)
         self.fecha_orden_edit.dateChanged.connect(lambda date: self.billing_fecha_orden_label.setText(date.toString("dd/MM/yyyy")))
         self.fecha_entrega_edit.dateChanged.connect(lambda date: self.billing_fecha_entrega_label.setText(date.toString("dd/MM/yyyy")))
-        self.valor_orden_edit.textChanged.connect(self.update_saldo)
         self.abono_edit.textChanged.connect(self.update_saldo)
-
+        
         # Initial values
         self.billing_fecha_orden_label.setText(QDate.currentDate().toString("dd/MM/yyyy"))
         self.billing_fecha_entrega_label.setText(QDate.currentDate().toString("dd/MM/yyyy"))
         
         return billing_group
+
+    def add_reference_row(self):
+        row_widget = QWidget()
+        row_layout = QHBoxLayout(row_widget)
+        row_layout.setContentsMargins(0, 0, 0, 0)
+        
+        ref_edit = QLineEdit()
+        color_edit = QLineEdit()
+        valor_edit = QLineEdit()
+        valor_edit.setValidator(QIntValidator())
+        
+        # Connect the value change signal
+        valor_edit.textChanged.connect(self.update_order_total)
+        
+        row_layout.addWidget(ref_edit, 1)
+        row_layout.addWidget(color_edit, 2)
+        row_layout.addWidget(valor_edit, 1)
+        
+        # Add delete button if not one of the first two rows
+        if len(self.ref_rows) >= 2:
+            delete_button = QPushButton("×")
+            delete_button.setFixedWidth(20)
+            delete_button.clicked.connect(lambda: self.delete_reference_row(row_widget))
+            row_layout.addWidget(delete_button)
+        
+        self.ref_rows_layout.addWidget(row_widget)
+        self.ref_rows.append(row_widget)
+        
+        return row_widget
+
+    def delete_reference_row(self, row_widget):
+        self.ref_rows.remove(row_widget)
+        row_widget.deleteLater()
+        self.update_order_total()
+
+    def update_order_total(self):
+        total = 0
+        for row in self.ref_rows:
+            valor_edit = row.layout().itemAt(2).widget()
+            if valor_edit.text():
+                total += int(valor_edit.text())
+        
+        self.valor_orden_edit.setText(str(total))
+        self.update_saldo()
 
     def update_saldo(self):
         valor = int(self.valor_orden_edit.text()) if self.valor_orden_edit.text() else 0
