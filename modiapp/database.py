@@ -10,7 +10,7 @@ class Database:
 
     def create_tables(self):
         """Initialize the database and create tables if they don't exist"""
-        # Create data directory if it doesn't exist
+            # Create data directory if it doesn't exist
         os.makedirs(os.path.dirname('data/orders.db'), exist_ok=True)
         
         # Tabla de órdenes
@@ -23,9 +23,7 @@ class Database:
                 delivery_date TEXT,
                 status TEXT,
                 order_value REAL,
-                deposit REAL,
-                vendedor TEXT,
-                observaciones TEXT
+                deposit REAL
             )
         ''')
         
@@ -82,8 +80,8 @@ class Database:
             self.cursor.execute('''
                 INSERT INTO orders (
                     order_number, client_name, order_date, delivery_date,
-                    status, order_value, deposit, vendedor, observaciones
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    status, order_value, deposit    
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
             ''', (
                 order_data['order_number'],
                 order_data['client_name'],
@@ -91,9 +89,7 @@ class Database:
                 order_data['delivery_date'],
                 order_data['status'],
                 order_data['order_value'],
-                order_data['deposit'],
-                order_data.get('vendedor', ''),
-                order_data.get('observaciones', '')
+                order_data['deposit']
             ))
             
             order_id = self.cursor.lastrowid
