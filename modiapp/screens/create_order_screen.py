@@ -1185,52 +1185,80 @@ class CreateOrderScreen(QWidget):
             QMessageBox.critical(self, "Error", f"Error al guardar la orden: {str(e)}")
             import traceback
             traceback.print_exc()  # Para depuración
-    
+
     def collect_camisa_details(self):
-        """Collect all camisa measurements and specifications"""
         details = {}
-        #1. Recopilar medidas usando las referencias almacenadas
+        
+        # 1. Recopilar medidas básicas
         for field_name, edit in self.camisa_measure_edits.items():
             details[field_name] = edit.text()
         
-        #2 Recopilar selecciones de modelos
+        # 2. Modelo Espalda y opciones
         if self.espalda_button_group.checkedButton():
             details['modelo_espalda'] = self.espalda_button_group.checkedButton().text()
-
+        details['modelo_espalda_prespuente'] = self.prespuente_combo.currentText()
+        details['modelo_espalda_pechera'] = str(self.pechera_checkbox.isChecked())
+        details['modelo_espalda_tapa_boton'] = str(self.tapa_boton_checkbox.isChecked())
+        
+        # 3. Modelo Bolsillo
         if self.modelo_bolsillo_button_group.checkedButton():
             modelo = self.modelo_bolsillo_button_group.checkedButton().text()
             details['modelo_bolsillo'] = modelo
-
-            #Solo guardar lado y cantidad si NO está seleccionado
             if modelo != "NO":
                 if self.lado_bolsillo_group.checkedButton():
                     details['lado_bolsillo'] = self.lado_bolsillo_group.checkedButton().text()
                 details['cantidad_bolsillo'] = self.cantidad_bolsillo_edit.text()
         
-        #3. Modelo y textura del puño
+        # 4. Modelo Puño
         if self.modelo_puno_button_group.checkedButton():
             details['modelo_puno'] = self.modelo_puno_button_group.checkedButton().text()
-        
         if self.textura_puno_button_group.checkedButton():
             details['textura_puno'] = self.textura_puno_button_group.checkedButton().text()
+        details['ancho_cms_puno'] = self.ancho_input.text()
         
-        #4. Modelo y textura del cuello
+        # 5. Modelo Cuello
         if self.modelo_cuello_button_group.checkedButton():
             modelo = self.modelo_cuello_button_group.checkedButton().text()
             if modelo == "OTRO - CUAL?" and self.otro_cuello_input.text():
                 details['modelo_cuello'] = self.otro_cuello_input.text()
             else:
                 details['modelo_cuello'] = modelo
-        
         if self.textura_cuello_button_group.checkedButton():
             details['textura_cuello'] = self.textura_cuello_button_group.checkedButton().text()
-            
-        # 5. Opciones adicionales de cuello
         if self.plum_cuello_group.checkedButton():
             details['plum_cuello'] = self.plum_cuello_group.checkedButton().text()
-        
         if self.bd_cuello_group.checkedButton():
             details['bottom_down_cuello'] = self.bd_cuello_group.checkedButton().text()
+        
+        # 6. Texto
+        detalles_layout = self.findChild(QGridLayout, "detalles_layout")
+        if detalles_layout:
+            for i in range(1, 2):  # Filas de iniciales
+                for j in range(6):  # 6 columnas
+                    widget = detalles_layout.itemAtPosition(i, j).widget()
+                    if isinstance(widget, QLineEdit):
+                        field_name = f"texto_{['iniciales','color','tipo','bol','fre','puñ'][j]}"
+                        details[field_name] = widget.text()
+        
+        # 7. Falda
+        for i, field in enumerate(["color", "marip", "r_abert"]):
+            edit = self.findChild(QLineEdit, f"falda_{field}_edit")
+            if edit:
+                details[f"falda_{field}"] = edit.text()
+        
+        # 8. Prenda y Empaque
+        if self.prenda_group.checkedButton():
+            details['Prenda'] = self.prenda_group.checkedButton().text()
+        if self.empaque_group.checkedButton():
+            details['Empaque'] = self.empaque_group.checkedButton().text()
+        
+        # 9. Contextura Física
+        details['contextura_fisica_espalda'] = self.contextura_espalda_edit.text()
+        details['contextura_fisica_abdomen'] = self.contextura_abdomen_edit.text()
+        
+        # 10. Observaciones y Vendedor
+        details['observaciones'] = self.camisa_observaciones_edit.toPlainText()
+        details['vendedor'] = self.camisa_vendedor_edit.text()
         
         return details
 
