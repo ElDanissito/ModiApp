@@ -153,18 +153,18 @@ class CreateOrderScreen(QWidget):
         # Prespuente
         prespuente_layout = QHBoxLayout()
         prespuente_layout.addWidget(QLabel("Prespuente:"))
-        prespuente_combo = QComboBox()
-        prespuente_combo.addItems(["1/16", "1/8", "3/16", "1/4", "Dob"])
-        prespuente_layout.addWidget(prespuente_combo)
+        self.prespuente_combo = QComboBox()
+        self.prespuente_combo.addItems(["1/16", "1/8", "3/16", "1/4", "Dob"])
+        prespuente_layout.addWidget(self.prespuente_combo)
         additional_options_layout.addLayout(prespuente_layout)
 
         # Pechera
-        pechera_checkbox = QCheckBox("Pechera")
-        additional_options_layout.addWidget(pechera_checkbox)
+        self.pechera_checkbox = QCheckBox("Pechera")
+        additional_options_layout.addWidget(self.pechera_checkbox)
 
         # Tapa botón
-        tapa_boton_checkbox = QCheckBox("Tapa botón")
-        additional_options_layout.addWidget(tapa_boton_checkbox)
+        self.tapa_boton_checkbox = QCheckBox("Tapa botón")
+        additional_options_layout.addWidget(self.tapa_boton_checkbox)
         
         espalda_main_layout.addLayout(additional_options_layout)
         modelos_layout.addWidget(espalda_group)
@@ -436,49 +436,65 @@ class CreateOrderScreen(QWidget):
         iniciales_group = QGroupBox("Texto")
         iniciales_layout = QGridLayout(iniciales_group)
         iniciales_fields = ["Iniciales", "Color", "Tipo", "Bol", "Fre.", "Puñ"]
+        self.iniciales_edits = {}
         for i, field in enumerate(iniciales_fields):
             iniciales_layout.addWidget(QLabel(field), 0, i)
-            iniciales_layout.addWidget(QLineEdit(), 1, i)
+            edit = QLineEdit()
+            self.iniciales_edits[f"texto_{field.lower().replace('.', '')}"] = edit
+            iniciales_layout.addWidget(edit, 1, i)
         detalles_layout.addWidget(iniciales_group, 0, 0)
 
         falda_group = QGroupBox("Falda")
         falda_layout = QGridLayout(falda_group)
         falda_fields = ["Color", "Marip", "R. Abert"]
+        self.falda_edits = {}
         for i, field in enumerate(falda_fields):
             falda_layout.addWidget(QLabel(field), 0, i)
-            falda_layout.addWidget(QLineEdit(), 1, i)
+            edit = QLineEdit()
+            self.falda_edits[f"falda_{field.lower().replace(' ', '_').replace('.', '')}"] = edit
+            falda_layout.addWidget(edit, 1, i)
         detalles_layout.addWidget(falda_group, 1, 0)
         
         prenda_empaque_layout = QVBoxLayout()
         detalles_layout.addLayout(prenda_empaque_layout, 0, 1, 2, 1)
 
-        prenda_group = QGroupBox("Prenda")
-        prenda_layout = QHBoxLayout(prenda_group)
-        prenda_layout.addWidget(QRadioButton("Camisa"))
-        prenda_layout.addWidget(QRadioButton("Guayabera"))
-        prenda_empaque_layout.addWidget(prenda_group)
+        self.prenda_group = QButtonGroup()
+        prenda_box = QGroupBox("Prenda")
+        prenda_layout = QHBoxLayout(prenda_box)
+        rb_camisa = QRadioButton("Camisa"); self.prenda_group.addButton(rb_camisa)
+        rb_guayabera = QRadioButton("Guayabera"); self.prenda_group.addButton(rb_guayabera)
+        prenda_layout.addWidget(rb_camisa)
+        prenda_layout.addWidget(rb_guayabera)
+        prenda_empaque_layout.addWidget(prenda_box)
 
-        empaque_group = QGroupBox("Empaque")
-        empaque_layout = QHBoxLayout(empaque_group)
-        empaque_layout.addWidget(QRadioButton("Gancho"))
-        empaque_layout.addWidget(QRadioButton("Doblada"))
-        prenda_empaque_layout.addWidget(empaque_group)
+        self.empaque_group = QButtonGroup()
+        empaque_box = QGroupBox("Empaque")
+        empaque_layout = QHBoxLayout(empaque_box)
+        rb_gancho = QRadioButton("Gancho"); self.empaque_group.addButton(rb_gancho)
+        rb_doblada = QRadioButton("Doblada"); self.empaque_group.addButton(rb_doblada)
+        empaque_layout.addWidget(rb_gancho)
+        empaque_layout.addWidget(rb_doblada)
+        prenda_empaque_layout.addWidget(empaque_box)
         
         contextura_group = QGroupBox("Contextura Fisica")
         contextura_layout = QGridLayout(contextura_group)
         contextura_layout.addWidget(QLabel("Espalda"), 0, 0)
-        contextura_layout.addWidget(QLineEdit(), 1, 0)
+        self.contextura_espalda_edit = QLineEdit()
+        contextura_layout.addWidget(self.contextura_espalda_edit, 1, 0)
         contextura_layout.addWidget(QLabel("Abdomen"), 0, 1)
-        contextura_layout.addWidget(QLineEdit(), 1, 1)
+        self.contextura_abdomen_edit = QLineEdit()
+        contextura_layout.addWidget(self.contextura_abdomen_edit, 1, 1)
         detalles_layout.addWidget(contextura_group, 0, 2, 2, 1)
 
         observaciones_group = QGroupBox("Observaciones")
         obs_layout = QVBoxLayout(observaciones_group)
-        obs_layout.addWidget(QTextEdit())
+        self.camisa_observaciones_edit = QTextEdit()
+        obs_layout.addWidget(self.camisa_observaciones_edit)
         
         vendedor_layout = QVBoxLayout()
         vendedor_layout.addWidget(QLabel("Vendedor:"))
-        vendedor_layout.addWidget(QLineEdit())
+        self.camisa_vendedor_edit = QLineEdit()
+        vendedor_layout.addWidget(self.camisa_vendedor_edit)
 
         obs_vend_layout = QHBoxLayout()
         obs_vend_layout.addWidget(observaciones_group, 3)
@@ -497,10 +513,13 @@ class CreateOrderScreen(QWidget):
         medidas_saco_layout = QGridLayout()
         saco_layout.addLayout(medidas_saco_layout)
         
-        fields = ["Talle", "Largo", "1/2 Espalda", "Hombro", "Manga", "Pecho", "Cintura", "Cadera"]
+        fields = ["Talle", "Largo", "1/2 espalda", "Hombro", "Manga", "Pecho", "Cintura", "Cadera"]
+        self.saco_measure_edits = {}
         for i, field in enumerate(fields):
             medidas_saco_layout.addWidget(QLabel(field), 0, i)
-            medidas_saco_layout.addWidget(QLineEdit(), 1, i)
+            edit = QLineEdit()
+            medidas_saco_layout.addWidget(edit, 1, i)
+            self.saco_measure_edits[field] = edit
 
         saco_layout.addLayout(self.create_saco_section())
 
@@ -616,7 +635,8 @@ class CreateOrderScreen(QWidget):
             opt = self.create_svg_radio_button(f"docs/svgs/Medidas Saco/Solapa/{opt_text}.svg", opt_text, self.solapa_saco_group)
             solapa_layout.addWidget(opt, 0, i)
         
-        solapa_layout.addWidget(QCheckBox("Ojal solapa"), 1, 0, 1, 3, Qt.AlignCenter)
+        self.ojal_solapa_checkbox = QCheckBox("Ojal solapa")
+        solapa_layout.addWidget(self.ojal_solapa_checkbox, 1, 0, 1, 3, Qt.AlignCenter)
 
 
         # --- Bolsillo Inferior ---
@@ -669,8 +689,11 @@ class CreateOrderScreen(QWidget):
         
         si_no_layout = QVBoxLayout()
         si_no_layout.addStretch()
+        self.bolsillo_sup_enable_group = QButtonGroup()
         rb_si_bolsillo = QRadioButton("SI")
         rb_no_bolsillo = QRadioButton("NO")
+        self.bolsillo_sup_enable_group.addButton(rb_si_bolsillo)
+        self.bolsillo_sup_enable_group.addButton(rb_no_bolsillo)
         si_no_layout.addWidget(rb_si_bolsillo)
         si_no_layout.addWidget(rb_no_bolsillo)
         si_no_layout.addStretch()
@@ -686,10 +709,6 @@ class CreateOrderScreen(QWidget):
         bolsillo_sup_options_layout.addWidget(parche_opt)
         bolsillo_sup_layout.addWidget(bolsillo_sup_options_container)
         
-        self.bolsillo_sup_enable_group = QButtonGroup()
-        self.bolsillo_sup_enable_group.addButton(rb_si_bolsillo)
-        self.bolsillo_sup_enable_group.addButton(rb_no_bolsillo)
-
         rb_no_bolsillo.setChecked(True)
         bolsillo_sup_options_container.setEnabled(False)
 
@@ -698,6 +717,12 @@ class CreateOrderScreen(QWidget):
                 bolsillo_sup_options_container.setEnabled(True)
             else:
                 bolsillo_sup_options_container.setEnabled(False)
+                # If 'NO' is selected, clear the selection in the type group
+                if self.bolsillo_sup_type_group.checkedButton():
+                    self.bolsillo_sup_type_group.setExclusive(False)
+                    self.bolsillo_sup_type_group.checkedButton().setChecked(False)
+                    self.bolsillo_sup_type_group.setExclusive(True)
+
         self.bolsillo_sup_enable_group.buttonClicked.connect(toggle_bolsillo_sup)
 
         # --- Modelo Chaleco ---
@@ -772,12 +797,14 @@ class CreateOrderScreen(QWidget):
         # --- Observaciones y Vendedor ---
         observaciones_group = QGroupBox("Observaciones")
         obs_layout = QVBoxLayout(observaciones_group)
-        obs_layout.addWidget(QTextEdit())
+        self.saco_observaciones_edit = QTextEdit()
+        obs_layout.addWidget(self.saco_observaciones_edit)
         saco_section_layout.addWidget(observaciones_group)
 
         vendedor_layout = QHBoxLayout()
         vendedor_layout.addWidget(QLabel("Vendedor:"))
-        vendedor_layout.addWidget(QLineEdit())
+        self.saco_vendedor_edit = QLineEdit()
+        vendedor_layout.addWidget(self.saco_vendedor_edit)
         saco_section_layout.addLayout(vendedor_layout)
 
         return saco_section_layout
@@ -834,18 +861,18 @@ class CreateOrderScreen(QWidget):
         # Oreja row
         terminado_layout.addWidget(QLabel("OREJA"), 1, 0)
         self.terminado_oreja_group = QButtonGroup()
-        for j, opt_text in enumerate(["Izq", "Der", "NO"]):
+        for j, opt_text in enumerate(["NO", "Izq", "Der"]):
             rb = QRadioButton(opt_text)
             self.terminado_oreja_group.addButton(rb)
             terminado_layout.addWidget(rb, 1, j + 1)
             
-        chk_parche = QCheckBox("PARCHE")
-        terminado_layout.addWidget(chk_parche, 2, 0)
+        self.terminado_parche_checkbox = QCheckBox("PARCHE")
+        terminado_layout.addWidget(self.terminado_parche_checkbox, 2, 0)
         terminado_layout.addWidget(QLabel("MOD #:"), 2, 1)
-        edit_mod = QLineEdit()
-        edit_mod.setEnabled(False)
-        chk_parche.toggled.connect(edit_mod.setEnabled)
-        terminado_layout.addWidget(edit_mod, 2, 2, 1, 2)
+        self.terminado_parche_mod_edit = QLineEdit()
+        self.terminado_parche_mod_edit.setEnabled(False)
+        self.terminado_parche_checkbox.toggled.connect(self.terminado_parche_mod_edit.setEnabled)
+        terminado_layout.addWidget(self.terminado_parche_mod_edit, 2, 2, 1, 2)
 
         left_column.addLayout(trasero_terminado_layout)
 
@@ -855,9 +882,12 @@ class CreateOrderScreen(QWidget):
         # Medidas
         medidas_pantalon_layout = QGridLayout()
         pantalon_fields = ["Cintura", "Base", "Largo", "Pierna", "Rodilla", "Bota", "Tiro", "CONT. T"]
+        self.pantalon_measure_edits = {}
         for i, field in enumerate(pantalon_fields):
             medidas_pantalon_layout.addWidget(QLabel(field), 0, i, alignment=Qt.AlignCenter)
-            medidas_pantalon_layout.addWidget(QLineEdit(), 1, i)
+            edit = QLineEdit()
+            medidas_pantalon_layout.addWidget(edit, 1, i)
+            self.pantalon_measure_edits[field.lower().replace(' ', '_').replace('.','')] = edit
         right_column.addLayout(medidas_pantalon_layout)
 
         # Pretina
@@ -877,8 +907,10 @@ class CreateOrderScreen(QWidget):
         pretina_layout.addWidget(pretina_modelos_group)
         pretina_opts_group = QGroupBox()
         pretina_opts_layout = QVBoxLayout(pretina_opts_group)
-        pretina_opts_layout.addWidget(QCheckBox("BOTON"))
-        pretina_opts_layout.addWidget(QCheckBox("GANCHO"))
+        self.pretina_boton_checkbox = QCheckBox("BOTON")
+        self.pretina_gancho_checkbox = QCheckBox("GANCHO")
+        pretina_opts_layout.addWidget(self.pretina_boton_checkbox)
+        pretina_opts_layout.addWidget(self.pretina_gancho_checkbox)
         pasadores_group = QGroupBox("PASADORES")
         pasadores_layout = QHBoxLayout(pasadores_group)
         self.pasadores_group = QButtonGroup()
@@ -905,35 +937,59 @@ class CreateOrderScreen(QWidget):
         forrado_options_widget = QWidget()
         forrado_options_layout = QGridLayout(forrado_options_widget)
         self.forrado_todo_mitad_group = QButtonGroup(); self.forrado_frente_trasero_group = QButtonGroup()
+        
+        # Adding descriptive names for radio button groups
+        self.forrado_opcion_1_group = QButtonGroup()
+        self.forrado_opcion_2_group = QButtonGroup()
+
         for r, (text1, text2) in enumerate([("TODO", "MITAD"), ("Frente", "Trasero")]):
             rb1 = QRadioButton(text1); rb2 = QRadioButton(text2)
-            if r == 0: self.forrado_todo_mitad_group.addButton(rb1); self.forrado_todo_mitad_group.addButton(rb2)
-            else: self.forrado_frente_trasero_group.addButton(rb1); self.forrado_frente_trasero_group.addButton(rb2)
+            if r == 0:
+                self.forrado_opcion_1_group.addButton(rb1); self.forrado_opcion_1_group.addButton(rb2)
+            else:
+                self.forrado_opcion_2_group.addButton(rb1); self.forrado_opcion_2_group.addButton(rb2)
             forrado_options_layout.addWidget(rb1, r, 0); forrado_options_layout.addWidget(rb2, r, 1)
         forrado_layout.addWidget(forrado_options_widget, 1, 0, 1, 2)
         forrado_options_widget.setEnabled(False)
+        self.forrado_enable_group = QButtonGroup()
+        self.forrado_enable_group.addButton(rb_forrado_si)
+        self.forrado_enable_group.addButton(rb_forrado_no)
         rb_forrado_si.toggled.connect(forrado_options_widget.setEnabled)
         rb_forrado_no.setChecked(True)
         
         especial_group = QGroupBox("Especial"); especial_layout = QVBoxLayout(especial_group)
         side_panel.addWidget(especial_group, 0, 1)
-        especial_layout.addWidget(QLineEdit()); especial_layout.addWidget(QCheckBox("Relojera"))
+        self.pantalon_especial_edit = QLineEdit()
+        self.pantalon_relojera_checkbox = QCheckBox("Relojera")
+        especial_layout.addWidget(self.pantalon_especial_edit); especial_layout.addWidget(self.pantalon_relojera_checkbox)
         
         bota_group = QGroupBox("Bota"); bota_layout = QVBoxLayout(bota_group)
         side_panel.addWidget(bota_group, 1, 1)
-        for text in ["Lisa", "Voltea", "Pespun."]: bota_layout.addWidget(QRadioButton(text))
+        self.bota_group = QButtonGroup()
+        for text in ["Lisa", "Voltea", "Pespun."]:
+            rb = QRadioButton(text)
+            self.bota_group.addButton(rb)
+            bota_layout.addWidget(rb)
             
         estilo_del_group = QGroupBox("Estilo Delantero"); estilo_del_layout = QVBoxLayout(estilo_del_group)
         side_panel.addWidget(estilo_del_group, 2, 0, 1, 2)
         estilo_del_h_layout = QHBoxLayout(); estilo_del_layout.addLayout(estilo_del_h_layout)
-        for text in ["Liso", "Prenses", "Fuelle"]: estilo_del_h_layout.addWidget(QRadioButton(text))
+        self.estilo_delantero_group = QButtonGroup()
+        for text in ["Liso", "Prenses", "Fuelle"]:
+            rb = QRadioButton(text)
+            self.estilo_delantero_group.addButton(rb)
+            estilo_del_h_layout.addWidget(rb)
 
         obs_vend_layout = QVBoxLayout()
         bottom_right_layout.addLayout(obs_vend_layout)
         observaciones_group = QGroupBox("Observaciones"); obs_vend_layout.addWidget(observaciones_group)
-        obs_layout = QVBoxLayout(observaciones_group); obs_layout.addWidget(QTextEdit())
+        obs_layout = QVBoxLayout(observaciones_group)
+        self.pantalon_observaciones_edit = QTextEdit()
+        obs_layout.addWidget(self.pantalon_observaciones_edit)
         vendedor_layout = QHBoxLayout(); obs_vend_layout.addLayout(vendedor_layout)
-        vendedor_layout.addWidget(QLabel("Vendedor:")); vendedor_layout.addWidget(QLineEdit())
+        vendedor_layout.addWidget(QLabel("Vendedor:"))
+        self.pantalon_vendedor_edit = QLineEdit()
+        vendedor_layout.addWidget(self.pantalon_vendedor_edit)
 
         pantalon_section_layout.addLayout(left_column, 2)
         pantalon_section_layout.addLayout(right_column, 3)
@@ -993,9 +1049,12 @@ class CreateOrderScreen(QWidget):
         # SM, SC, AG, AC
         sm_sc_group = QGroupBox()
         sm_sc_layout = QGridLayout(sm_sc_group)
+        self.sm_sc_edits = {}
         for i, text in enumerate(["SM", "SC", "AG", "AC"]):
             sm_sc_layout.addWidget(QLabel(text), 0, i, alignment=Qt.AlignCenter)
-            sm_sc_layout.addWidget(QLineEdit(), 1, i)
+            edit = QLineEdit()
+            self.sm_sc_edits[text] = edit
+            sm_sc_layout.addWidget(edit, 1, i)
         date_sm_layout.addWidget(sm_sc_group)
         
         client_date_layout.addLayout(date_sm_layout)
@@ -1004,9 +1063,12 @@ class CreateOrderScreen(QWidget):
         client_info_group = QGroupBox()
         client_info_layout = QGridLayout(client_info_group)
         client_info_layout.addWidget(QLabel("Cliente:"), 0, 0); self.billing_cliente_label = QLabel(); client_info_layout.addWidget(self.billing_cliente_label, 0, 1, 1, 5)
-        client_info_layout.addWidget(QLabel("Dirección:"), 1, 0); client_info_layout.addWidget(QLineEdit(), 1, 1, 1, 5)
-        client_info_layout.addWidget(QLabel("Teléfono:"), 2, 0); client_info_layout.addWidget(QLineEdit(), 2, 1)
-        client_info_layout.addWidget(QLabel("C.C.:"), 2, 2); client_info_layout.addWidget(QLineEdit(), 2, 3)
+        self.direccion_edit = QLineEdit()
+        client_info_layout.addWidget(QLabel("Dirección:"), 1, 0); client_info_layout.addWidget(self.direccion_edit, 1, 1, 1, 5)
+        self.telefono_edit = QLineEdit()
+        client_info_layout.addWidget(QLabel("Teléfono:"), 2, 0); client_info_layout.addWidget(self.telefono_edit, 2, 1)
+        self.cc_edit = QLineEdit()
+        client_info_layout.addWidget(QLabel("C.C.:"), 2, 2); client_info_layout.addWidget(self.cc_edit, 2, 3)
         client_date_layout.addWidget(client_info_group)
         
         top_row_layout.addLayout(client_date_layout)
@@ -1140,13 +1202,13 @@ class CreateOrderScreen(QWidget):
                 'status': 'Pendiente',  # Estado por defecto
                 'order_value': int(self.valor_orden_edit.text()) if self.valor_orden_edit.text() else 0,
                 'deposit': int(self.abono_edit.text()) if self.abono_edit.text() else 0,
-                # Agregar campos adicionales requeridos por la DB
                 'vendedor': '',  # Se debe agregar campo en la UI
                 'observaciones': ''  # Se debe agregar campo en la UI
             }
 
             # Collect all measurements and specifications
             details_data = {
+                'orden': self.collect_order_details(),
                 'camisa': self.collect_camisa_details(),
                 'saco': self.collect_saco_details(),
                 'pantalon': self.collect_pantalon_details()
@@ -1197,8 +1259,8 @@ class CreateOrderScreen(QWidget):
         if self.espalda_button_group.checkedButton():
             details['modelo_espalda'] = self.espalda_button_group.checkedButton().text()
         details['modelo_espalda_prespuente'] = self.prespuente_combo.currentText()
-        details['modelo_espalda_pechera'] = str(self.pechera_checkbox.isChecked())
-        details['modelo_espalda_tapa_boton'] = str(self.tapa_boton_checkbox.isChecked())
+        details['modelo_espalda_pechera'] = self.pechera_checkbox.isChecked()
+        details['modelo_espalda_tapa_boton'] = self.tapa_boton_checkbox.isChecked()
         
         # 3. Modelo Bolsillo
         if self.modelo_bolsillo_button_group.checkedButton():
@@ -1231,20 +1293,12 @@ class CreateOrderScreen(QWidget):
             details['bottom_down_cuello'] = self.bd_cuello_group.checkedButton().text()
         
         # 6. Texto
-        detalles_layout = self.findChild(QGridLayout, "detalles_layout")
-        if detalles_layout:
-            for i in range(1, 2):  # Filas de iniciales
-                for j in range(6):  # 6 columnas
-                    widget = detalles_layout.itemAtPosition(i, j).widget()
-                    if isinstance(widget, QLineEdit):
-                        field_name = f"texto_{['iniciales','color','tipo','bol','fre','puñ'][j]}"
-                        details[field_name] = widget.text()
+        for field, edit in self.iniciales_edits.items():
+            details[field] = edit.text()
         
         # 7. Falda
-        for i, field in enumerate(["color", "marip", "r_abert"]):
-            edit = self.findChild(QLineEdit, f"falda_{field}_edit")
-            if edit:
-                details[f"falda_{field}"] = edit.text()
+        for field, edit in self.falda_edits.items():
+            details[field] = edit.text()
         
         # 8. Prenda y Empaque
         if self.prenda_group.checkedButton():
@@ -1262,24 +1316,31 @@ class CreateOrderScreen(QWidget):
         
         return details
 
+    def collect_order_details(self):
+        details = {}
+        for field, edit in self.sm_sc_edits.items():
+            details[field] = edit.text()
+        details['Direccion'] = self.direccion_edit.text()
+        details['Telefono'] = self.telefono_edit.text()
+        details['CC'] = self.cc_edit.text()
+        return details
 
     def collect_saco_details(self):
         """Collect all saco measurements and specifications"""
         details = {}
         
         # Collect measurements
-        for i, field in enumerate(["Talle", "Largo", "1/2 Espalda", "Hombro", "Manga", 
-                                 "Pecho", "Cintura", "Cadera"]):
-            edit = self.findChild(QLineEdit, f"saco_{field.lower().replace(' ', '_')}")
-            if edit:
-                details[field] = edit.text()
+        for field, edit in self.saco_measure_edits.items():
+            details[field] = edit.text()
 
         # Collect model selections
         if self.estilo_saco_group.checkedButton():
             details['Estilo'] = self.estilo_saco_group.checkedButton().text()
+            details['cantidad_boton'] = self.cant_boton_edit.text()
         
         if self.solapa_saco_group.checkedButton():
             details['Solapa'] = self.solapa_saco_group.checkedButton().text()
+        details['ojal_solapa'] = self.ojal_solapa_checkbox.isChecked()
         
         if self.bolsillo_inf_saco_group.checkedButton():
             details['Bolsillo Inferior'] = self.bolsillo_inf_saco_group.checkedButton().text()
@@ -1290,6 +1351,24 @@ class CreateOrderScreen(QWidget):
         if self.abertura_group.checkedButton():
             details['Abertura'] = self.abertura_group.checkedButton().text()
 
+        if self.bolsillo_sup_enable_group.checkedButton() and self.bolsillo_sup_enable_group.checkedButton().text() == 'SI':
+            if self.bolsillo_sup_type_group.checkedButton():
+                details['Bolsillo superior'] = self.bolsillo_sup_type_group.checkedButton().text()
+        else:
+            details['Bolsillo superior'] = 'NO'
+
+        if self.chaleco_enable_group.checkedButton() and self.chaleco_enable_group.checkedButton().text() == 'SI':
+            details['Modelo chaleco'] = 'SI'
+            details['chaleco_diagonal_pecho'] = self.diagonal_pecho_edit.text()
+            details['chaleco_centro'] = self.centro_edit.text()
+            details['chaleco_largo_espalda'] = self.largo_espalda_edit.text()
+            details['observaciones_chaleco'] = self.obs_chaleco_edit.toPlainText()
+        else:
+            details['Modelo chaleco'] = 'NO'
+            
+        details['observaciones'] = self.saco_observaciones_edit.toPlainText()
+        details['vendedor'] = self.saco_vendedor_edit.text()
+
         return details
 
     def collect_pantalon_details(self):
@@ -1297,11 +1376,8 @@ class CreateOrderScreen(QWidget):
         details = {}
         
         # Collect measurements
-        for i, field in enumerate(["Cintura", "Base", "Largo", "Pierna", "Rodilla", 
-                                 "Bota", "Tiro", "CONT. T"]):
-            edit = self.findChild(QLineEdit, f"pantalon_{field.lower().replace(' ', '_')}")
-            if edit:
-                details[field] = edit.text()
+        for field, edit in self.pantalon_measure_edits.items():
+            details[field.replace('_', ' ').upper()] = edit.text()
 
         # Collect model selections
         if self.bolsillo_del_group.checkedButton():
@@ -1310,8 +1386,43 @@ class CreateOrderScreen(QWidget):
         if self.bolsillo_tras_group.checkedButton():
             details['Bolsillo Trasero'] = self.bolsillo_tras_group.checkedButton().text()
         
+        if self.terminado_boton_group.checkedButton():
+            details['terminado_bolsillo_trasero_boton'] = self.terminado_boton_group.checkedButton().text()
+        if self.terminado_oreja_group.checkedButton():
+            details['terminado_bolsillo_trasero_oreja'] = self.terminado_oreja_group.checkedButton().text()
+        details['terminado_bolsillo_trasero_parche'] = self.terminado_parche_checkbox.isChecked()
+        if self.terminado_parche_checkbox.isChecked():
+            details['terminado_bolsillo_trasero_parche_mod'] = self.terminado_parche_mod_edit.text()
+
         if self.pretina_modelos_group.checkedButton():
             details['Pretina'] = self.pretina_modelos_group.checkedButton().text()
+        
+        details['Boton'] = self.pretina_boton_checkbox.isChecked()
+        details['Gancho'] = self.pretina_gancho_checkbox.isChecked()
+        
+        if self.pasadores_group.checkedButton():
+            details['Pasadores'] = self.pasadores_group.checkedButton().text()
+            
+        if self.forrado_enable_group.checkedButton() and self.forrado_enable_group.checkedButton().text() == 'SI':
+            details['forrado'] = 'SI'
+            if self.forrado_opcion_1_group.checkedButton():
+                details['forrado_opcion_1'] = self.forrado_opcion_1_group.checkedButton().text()
+            if self.forrado_opcion_2_group.checkedButton():
+                details['forrado_opcion_2'] = self.forrado_opcion_2_group.checkedButton().text()
+        else:
+            details['forrado'] = 'NO'
+            
+        if self.estilo_delantero_group.checkedButton():
+            details['estilo_delantero'] = self.estilo_delantero_group.checkedButton().text()
+            
+        details['Especial'] = self.pantalon_especial_edit.text()
+        details['Relojera'] = self.pantalon_relojera_checkbox.isChecked()
+        
+        if self.bota_group.checkedButton():
+            details['Bota'] = self.bota_group.checkedButton().text()
+            
+        details['observaciones'] = self.pantalon_observaciones_edit.toPlainText()
+        details['vendedor'] = self.pantalon_vendedor_edit.text()
 
         return details
 

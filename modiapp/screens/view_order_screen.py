@@ -86,41 +86,41 @@ class ViewOrderScreen(QWidget):
             },
             'pantalon': {
                 'bolsillo_delantero': {
-                    'Jean #1': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/Jean 1.svg",
-                    'Jean #2': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/Jean 2.svg",
-                    'Sesgado #3': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/Sesgado 3.svg",
-                    'Ses. T Recta #4': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/SES T RECTA 4.svg",
-                    'Ses. T Curva #5': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/SES T CURVA 5.svg",
-                    'Allado #6': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/Allado 6.svg",
-                    'Redondo #7': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/Redondo 7.svg",
-                    'Italiano #8': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/Italiano 8.svg",
-                    'Texas #9': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/Texas 9.svg",
-                    'Texas #10': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/Texas 10.svg",
-                    'Texas #11': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/Texas 11.svg",
-                    'Texas #12': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Delantero/Texas 12.svg"
+                    'Jean #1': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/Jean 1.svg",
+                    'Jean #2': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/Jean 2.svg",
+                    'Sesgado #3': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/Sesgado 3.svg",
+                    'Ses. T Recta #4': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/SES T RECTA 4.svg",
+                    'Ses. T Curva #5': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/SES T CURVA 5.svg",
+                    'Allado #6': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/Allado 6.svg",
+                    'Redondo #7': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/Redondo 7.svg",
+                    'Italiano #8': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/Italiano 8.svg",
+                    'Texas #9': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/Texas 9.svg",
+                    'Texas #10': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/Texas 10.svg",
+                    'Texas #11': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/Texas 11.svg",
+                    'Texas #12': f"{self.svg_base_path}/Medidas pantalon/Bolsillo delantero/Texas 12.svg"
                 },
                 'bolsillo_trasero': {
-                    'Tapa #1': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Trasero/Tapa 1.svg",
-                    'Tapa #2': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Trasero/Tapa 2.svg",
-                    'Tapa #3': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Trasero/Tapa 3.svg",
-                    'Tapa #4': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Trasero/Tapa 4.svg",
-                    'Tapa #5': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Trasero/Tapa 5.svg",
-                    'Ribete': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Trasero/Ribete.svg",
-                    'Aletilla': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Trasero/Aletilla.svg",
-                    'Con Oreja': f"{self.svg_base_path}/Medidas Pantalon/Bolsillo Trasero/Con oreja.svg"
+                    'Tapa #1': f"{self.svg_base_path}/Medidas pantalon/Bolsillo trasero/Tapa 1.svg",
+                    'Tapa #2': f"{self.svg_base_path}/Medidas pantalon/Bolsillo trasero/Tapa 2.svg",
+                    'Tapa #3': f"{self.svg_base_path}/Medidas pantalon/Bolsillo trasero/Tapa 3.svg",
+                    'Tapa #4': f"{self.svg_base_path}/Medidas pantalon/Bolsillo trasero/Tapa 4.svg",
+                    'Tapa #5': f"{self.svg_base_path}/Medidas pantalon/Bolsillo trasero/Tapa 5.svg",
+                    'Ribete': f"{self.svg_base_path}/Medidas pantalon/Bolsillo trasero/Ribete.svg",
+                    'Aletilla': f"{self.svg_base_path}/Medidas pantalon/Bolsillo trasero/Aletilla.svg",
+                    'Con Oreja': f"{self.svg_base_path}/Medidas pantalon/Bolsillo trasero/Con oreja.svg"
                 },
                 'pretina': {
-                    'Recta': f"{self.svg_base_path}/Medidas Pantalon/Pretina/Recta.svg",
-                    'Cruzada Curva': f"{self.svg_base_path}/Medidas Pantalon/Pretina/Cruzada curva.svg",
-                    'Cruzada Recta': f"{self.svg_base_path}/Medidas Pantalon/Pretina/Cruzada recta.svg",
-                    'Cruzada Punta': f"{self.svg_base_path}/Medidas Pantalon/Pretina/Cruzada punta.svg"
+                    'Recta': f"{self.svg_base_path}/Medidas pantalon/Pretina/Recta.svg",
+                    'Cruzada Curva': f"{self.svg_base_path}/Medidas pantalon/Pretina/Cruzada curva.svg",
+                    'Cruzada Recta': f"{self.svg_base_path}/Medidas pantalon/Pretina/Cruzada recta.svg",
+                    'Cruzada Punta': f"{self.svg_base_path}/Medidas pantalon/Pretina/Cruzada punta.svg"
                 }
             }
         }
         
         try:
             # Normalizar el valor para la búsqueda
-            normalized_value = value.strip()
+            normalized_value = value.strip().replace('\n', ' ')
             # Buscar en el mapeo
             if section in svg_paths and field in svg_paths[section]:
                 for key, path in svg_paths[section][field].items():
@@ -142,7 +142,7 @@ class ViewOrderScreen(QWidget):
         """Initialize the user interface"""
         self.setWindowTitle("Ver Orden")
         self.resize(1200, 800)
-        self.layout = QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         
         # Header with Logo and Back Button
         header_layout = QHBoxLayout()
@@ -157,7 +157,7 @@ class ViewOrderScreen(QWidget):
         header_layout.addWidget(logo_label)
         header_layout.addStretch()
         
-        self.layout.addLayout(header_layout)
+        main_layout.addLayout(header_layout)
         
         # Order Info
         order_info = self.order_data['order']
@@ -184,7 +184,7 @@ class ViewOrderScreen(QWidget):
             info_layout.addWidget(QLabel(order_info['vendedor']), 5, 1)
         
         info_group.setLayout(info_layout)
-        self.layout.addWidget(info_group)
+        main_layout.addWidget(info_group)
         
         # Financial Info
         financial_group = QGroupBox("Información Financiera")
@@ -201,7 +201,7 @@ class ViewOrderScreen(QWidget):
         financial_layout.addWidget(QLabel(f"$ {saldo:,}"), 2, 1)
         
         financial_group.setLayout(financial_layout)
-        self.layout.addWidget(financial_group)
+        main_layout.addWidget(financial_group)
         
         # References
         if self.order_data['references']:
@@ -217,12 +217,12 @@ class ViewOrderScreen(QWidget):
                 references_layout.addWidget(QLabel(f"$ {ref['value']:,}"), i, 5)
             
             references_group.setLayout(references_layout)
-            self.layout.addWidget(references_group)
+            main_layout.addWidget(references_group)
         
         # Details Scroll Area
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
-        scroll.setFrameShape(QFrame.NoFrame)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
         
         details_widget = QWidget()
         details_layout = QVBoxLayout(details_widget)
@@ -242,214 +242,187 @@ class ViewOrderScreen(QWidget):
         
         details_layout.addStretch()
         scroll.setWidget(details_widget)
-        self.layout.addWidget(scroll, 1)
+        main_layout.addWidget(scroll, 1)
         
         # Add some spacing at the bottom
-        self.layout.addStretch()
+        main_layout.addStretch()
     
     def create_camisa_section(self):
         """Create the camisa section with all details"""
-        section_data = self.order_data['details']['camisa']
+        section_data = self.order_data['details'].get('camisa', {})
         section_group = QGroupBox("MEDIDAS CAMISA")
-        section_layout = QVBoxLayout()
+        section_layout = QVBoxLayout(section_group)
+        
+        # Main layout for all content
+        main_content_layout = QHBoxLayout()
+
+        # Left side layout
+        left_layout = QVBoxLayout()
         
         # Medidas Básicas
         medidas_group = QGroupBox("Medidas")
-        medidas_layout = QGridLayout()
+        medidas_layout = QGridLayout(medidas_group)
         
-        # Lista de todas las medidas posibles
-        medidas = [
-            'cuello', 'espalda', 'hombro', 'manga_x_cont', 'largo',
-            'cont_manga', 'pecho', 'cintura', 'cadera'
-        ]
-        
+        medidas = ['Cuello', 'Espalda', 'Hombro', 'Manga x Cont.', 'Largo', 'Cont. manga', 'Pecho', 'Cintura', 'Cadera']
         row, col = 0, 0
         for medida in medidas:
-            if medida in section_data:
-                medidas_layout.addWidget(QLabel(f"{medida.replace('_', ' ').title()}:"), row, col*2)
-                medidas_layout.addWidget(QLabel(section_data[medida]), row, col*2+1)
-                col = (col + 1) % 3
-                if col == 0:
-                    row += 1
+            if medida in section_data and section_data[medida]:
+                medidas_layout.addWidget(QLabel(f"<b>{medida}:</b>"), row, col * 2)
+                medidas_layout.addWidget(QLabel(section_data[medida]), row, col * 2 + 1)
+                col = (col + 1) % 4
+                if col == 0: row += 1
         
-        medidas_group.setLayout(medidas_layout)
-        section_layout.addWidget(medidas_group)
+        left_layout.addWidget(medidas_group)
+
+        # Prenda, Empaque, Contextura, Vendedor
+        other_details_layout = QGridLayout()
+        
+        if section_data.get('Prenda'):
+            other_details_layout.addWidget(QLabel("<b>Prenda:</b>"), 0, 0)
+            other_details_layout.addWidget(QLabel(section_data['Prenda']), 0, 1)
+
+        if section_data.get('Empaque'):
+            other_details_layout.addWidget(QLabel("<b>Empaque:</b>"), 0, 2)
+            other_details_layout.addWidget(QLabel(section_data['Empaque']), 0, 3)
+
+        ctx_espalda = section_data.get('contextura_fisica_espalda')
+        ctx_abdomen = section_data.get('contextura_fisica_abdomen')
+        if ctx_espalda or ctx_abdomen:
+            ctx_group = QGroupBox("Contextura Física")
+            ctx_layout = QHBoxLayout(ctx_group)
+            if ctx_espalda:
+                ctx_layout.addWidget(QLabel(f"<b>Espalda:</b> {ctx_espalda}"))
+            if ctx_abdomen:
+                ctx_layout.addWidget(QLabel(f"<b>Abdomen:</b> {ctx_abdomen}"))
+            other_details_layout.addWidget(ctx_group, 1, 0, 1, 2)
+
+        if section_data.get('vendedor'):
+            other_details_layout.addWidget(QLabel("<b>Vendedor:</b>"), 1, 2)
+            other_details_layout.addWidget(QLabel(section_data['vendedor']), 1, 3)
+
+        left_layout.addLayout(other_details_layout)
+        
+        # Texto Section
+        texto_fields = ['texto_iniciales', 'texto_color', 'texto_tipo', 'texto_bol', 'texto_fre', 'texto_puñ']
+        if any(field in section_data and section_data.get(field) for field in texto_fields):
+            texto_group = QGroupBox("Texto")
+            texto_layout = QGridLayout(texto_group)
+            row, col = 0, 0
+            for field in texto_fields:
+                if section_data.get(field):
+                    label = field.replace('texto_', '').title()
+                    texto_layout.addWidget(QLabel(f"<b>{label}:</b>"), row, col * 2)
+                    texto_layout.addWidget(QLabel(section_data[field]), row, col * 2 + 1)
+                    col = (col + 1) % 3
+                    if col == 0: row += 1
+            left_layout.addWidget(texto_group)
+
+        # Falda Section
+        falda_fields = ['falda_color', 'falda_marip', 'falda_r_abert']
+        if any(field in section_data and section_data[field] for field in falda_fields):
+            falda_group = QGroupBox("Falda")
+            falda_layout = QGridLayout(falda_group)
+            for i, field in enumerate(falda_fields):
+                if section_data.get(field):
+                    label = field.replace('falda_', '').replace('_', ' ').title()
+                    falda_layout.addWidget(QLabel(f"<b>{label}:</b>"), 0, i*2)
+                    falda_layout.addWidget(QLabel(section_data[field]), 0, i*2 + 1)
+            left_layout.addWidget(falda_group)
+
+        main_content_layout.addLayout(left_layout)
+        
+        # Right side layout (models)
+        right_layout = QVBoxLayout()
         
         # Modelo Espalda
-        espalda_value = section_data.get('modelo_espalda', '')
         espalda_group = QGroupBox("Modelo Espalda")
-        espalda_layout = QVBoxLayout()
+        espalda_layout = QVBoxLayout(espalda_group)
+        espalda_value = section_data.get('modelo_espalda', '')
         
         if espalda_value and espalda_value.lower() != 'no':
             espalda_svg_path = self.get_svg_path('camisa', 'modelo_espalda', espalda_value)
-            espalda_svg = self.create_svg_widget(espalda_svg_path, (200, 200))
+            espalda_svg = self.create_svg_widget(espalda_svg_path, (150, 150))
             if espalda_svg:
-                espalda_layout.addWidget(espalda_svg, alignment=Qt.AlignCenter)
-            espalda_layout.addWidget(QLabel(espalda_value), alignment=Qt.AlignCenter)
+                espalda_layout.addWidget(espalda_svg, alignment=Qt.AlignmentFlag.AlignCenter)
+            espalda_layout.addWidget(QLabel(espalda_value), alignment=Qt.AlignmentFlag.AlignCenter)
         else:
-            espalda_layout.addWidget(QLabel("NO"), alignment=Qt.AlignCenter)
+            espalda_layout.addWidget(QLabel("NO"), alignment=Qt.AlignmentFlag.AlignCenter)
         
-        # Opciones adicionales
-        if 'prespuente' in section_data:
-            espalda_layout.addWidget(QLabel(f"Prespuente: {section_data['prespuente']}"))
-        if 'pechera' in section_data:
-            espalda_layout.addWidget(QLabel(f"Pechera: {'Sí' if section_data['pechera'].lower() == 'true' else 'No'}"))
-        if 'tapa_boton' in section_data:
-            espalda_layout.addWidget(QLabel(f"Tapa Botón: {'Sí' if section_data['tapa_boton'].lower() == 'true' else 'No'}"))
-        
-        espalda_group.setLayout(espalda_layout)
-        section_layout.addWidget(espalda_group)
+        if section_data.get('modelo_espalda_prespuente'):
+            espalda_layout.addWidget(QLabel(f"<b>Prespuente:</b> {section_data['modelo_espalda_prespuente']}"))
+        if section_data.get('modelo_espalda_pechera') == 'True':
+            espalda_layout.addWidget(QLabel("<b>Pechera:</b> Sí"))
+        if section_data.get('modelo_espalda_tapa_boton') == 'True':
+            espalda_layout.addWidget(QLabel("<b>Tapa Botón:</b> Sí"))
+
+        right_layout.addWidget(espalda_group)
         
         # Modelo Bolsillo
-        bolsillo_value = section_data.get('modelo_bolsillo', '')
         bolsillo_group = QGroupBox("Modelo Bolsillo")
-        bolsillo_layout = QVBoxLayout()
-        #quitar los saltos de linea
-        bolsillo_value = bolsillo_value.replace('\n', ' ')
+        bolsillo_layout = QVBoxLayout(bolsillo_group)
+        bolsillo_value = section_data.get('modelo_bolsillo', '')
+        bolsillo_value = bolsillo_value.replace('\\n', ' ')
         if bolsillo_value and bolsillo_value.lower() != 'no':
             bolsillo_svg_path = self.get_svg_path('camisa', 'modelo_bolsillo', bolsillo_value)
-            bolsillo_svg = self.create_svg_widget(bolsillo_svg_path, (150, 150))
+            bolsillo_svg = self.create_svg_widget(bolsillo_svg_path, (100, 100))
             if bolsillo_svg:
-                bolsillo_layout.addWidget(bolsillo_svg, alignment=Qt.AlignCenter)
-            bolsillo_layout.addWidget(QLabel(bolsillo_value), alignment=Qt.AlignCenter)
+                bolsillo_layout.addWidget(bolsillo_svg, alignment=Qt.AlignmentFlag.AlignCenter)
+            bolsillo_layout.addWidget(QLabel(bolsillo_value), alignment=Qt.AlignmentFlag.AlignCenter)
             
-            # Detalles adicionales del bolsillo
-            if 'lado_bolsillo' in section_data:
-                bolsillo_layout.addWidget(QLabel(f"Lado: {section_data['lado_bolsillo']}"))
-            if 'cantidad_bolsillo' in section_data:
-                bolsillo_layout.addWidget(QLabel(f"Cantidad: {section_data['cantidad_bolsillo']}"))
+            if section_data.get('lado_bolsillo'):
+                bolsillo_layout.addWidget(QLabel(f"<b>Lado:</b> {section_data['lado_bolsillo']}"))
+            if section_data.get('cantidad_bolsillo'):
+                bolsillo_layout.addWidget(QLabel(f"<b>Cantidad:</b> {section_data['cantidad_bolsillo']}"))
         else:
-            bolsillo_layout.addWidget(QLabel("NO"), alignment=Qt.AlignCenter)
-        
-        bolsillo_group.setLayout(bolsillo_layout)
-        section_layout.addWidget(bolsillo_group)
+            bolsillo_layout.addWidget(QLabel("NO"), alignment=Qt.AlignmentFlag.AlignCenter)
+        right_layout.addWidget(bolsillo_group)
         
         # Modelo Puño
         puno_group = QGroupBox("Modelo Puño")
-        puno_layout = QVBoxLayout()
-        
+        puno_layout = QVBoxLayout(puno_group)
         puno_value = section_data.get('modelo_puno', '')
         if puno_value and puno_value.lower() != 'no':
             puno_svg_path = self.get_svg_path('camisa', 'modelo_puño', puno_value)
-            puno_svg = self.create_svg_widget(puno_svg_path, (150, 150))
+            puno_svg = self.create_svg_widget(puno_svg_path, (100, 100))
             if puno_svg:
-                puno_layout.addWidget(puno_svg, alignment=Qt.AlignCenter)
-            puno_layout.addWidget(QLabel(puno_value), alignment=Qt.AlignCenter)
+                puno_layout.addWidget(puno_svg, alignment=Qt.AlignmentFlag.AlignCenter)
+            puno_layout.addWidget(QLabel(puno_value), alignment=Qt.AlignmentFlag.AlignCenter)
             
-            # Textura y ancho del puño
-            if 'textura_puno' in section_data:
-                puno_layout.addWidget(QLabel(f"Textura: {section_data['textura_puno']}"))
-            if 'ancho_puno' in section_data:
-                puno_layout.addWidget(QLabel(f"Ancho: {section_data['ancho_puno']} cm"))
+            if section_data.get('textura_puno'):
+                puno_layout.addWidget(QLabel(f"<b>Textura:</b> {section_data['textura_puno']}"))
+            if section_data.get('ancho_cms_puno'):
+                puno_layout.addWidget(QLabel(f"<b>Ancho:</b> {section_data['ancho_cms_puno']} cm"))
         else:
-            puno_layout.addWidget(QLabel("NO"), alignment=Qt.AlignCenter)
-        
-        puno_group.setLayout(puno_layout)
-        section_layout.addWidget(puno_group)
-        
+            puno_layout.addWidget(QLabel("NO"), alignment=Qt.AlignmentFlag.AlignCenter)
+        right_layout.addWidget(puno_group)
+
         # Modelo Cuello
         cuello_group = QGroupBox("Modelo Cuello")
-        cuello_layout = QVBoxLayout()
-        
+        cuello_layout = QVBoxLayout(cuello_group)
         cuello_value = section_data.get('modelo_cuello', '')
         if cuello_value and cuello_value.lower() != 'no':
-            cuello_layout.addWidget(QLabel(cuello_value), alignment=Qt.AlignCenter)
+            cuello_layout.addWidget(QLabel(cuello_value), alignment=Qt.AlignmentFlag.AlignCenter)
             
-            # Textura y opciones adicionales
-            if 'textura_cuello' in section_data:
-                cuello_layout.addWidget(QLabel(f"Textura: {section_data['textura_cuello']}"))
-                print(section_data['textura_cuello'])
-            if 'plum' in section_data:
-                cuello_layout.addWidget(QLabel(f"Plum: {section_data['plum']}"))
-                print(section_data['plum'])
-            if 'bd' in section_data:
-                cuello_layout.addWidget(QLabel(f"Bottom Down: {section_data['bd']}"))
-                print(section_data['bd'])
+            if section_data.get('textura_cuello'):
+                cuello_layout.addWidget(QLabel(f"<b>Textura:</b> {section_data['textura_cuello']}"))
+            if section_data.get('plum_cuello'):
+                cuello_layout.addWidget(QLabel(f"<b>Plum:</b> {section_data['plum_cuello']}"))
+            if section_data.get('bottom_down_cuello'):
+                cuello_layout.addWidget(QLabel(f"<b>Bottom Down:</b> {section_data['bottom_down_cuello']}"))
         else:
-            cuello_layout.addWidget(QLabel("NO"), alignment=Qt.AlignCenter)
-        
-        cuello_group.setLayout(cuello_layout)
-        section_layout.addWidget(cuello_group)
-        
-        # Texto
-        if 'iniciales' in section_data:
-            texto_group = QGroupBox("Texto")
-            texto_layout = QGridLayout()
-            
-            campos = ['iniciales', 'color', 'tipo', 'bol', 'fre', 'pun']
-            row, col = 0, 0
-            for campo in campos:
-                if campo in section_data:
-                    texto_layout.addWidget(QLabel(campo.title() + ":"), row, col*2)
-                    texto_layout.addWidget(QLabel(section_data[campo]), row, col*2+1)
-                    col = (col + 1) % 3
-                    if col == 0:
-                        row += 1
-            
-            texto_group.setLayout(texto_layout)
-            section_layout.addWidget(texto_group)
-        
-        # Falda
-        if 'color_falda' in section_data:
-            falda_group = QGroupBox("Falda")
-            falda_layout = QGridLayout()
-            
-            campos = ['color_falda', 'marip', 'r_abert']
-            row, col = 0, 0
-            for campo in campos:
-                if campo in section_data:
-                    falda_layout.addWidget(QLabel(campo.replace('_', ' ').title() + ":"), row, col*2)
-                    falda_layout.addWidget(QLabel(section_data[campo]), row, col*2+1)
-                    col = (col + 1) % 2
-                    if col == 0:
-                        row += 1
-            
-            falda_group.setLayout(falda_layout)
-            section_layout.addWidget(falda_group)
-        
-        # Prenda y Empaque
-        if 'tipo_prenda' in section_data or 'tipo_empaque' in section_data:
-            pe_group = QGroupBox("Prenda y Empaque")
-            pe_layout = QGridLayout()
-            
-            row = 0
-            if 'tipo_prenda' in section_data:
-                pe_layout.addWidget(QLabel("Prenda:"), row, 0)
-                pe_layout.addWidget(QLabel(section_data['tipo_prenda']), row, 1)
-                row += 1
-            if 'tipo_empaque' in section_data:
-                pe_layout.addWidget(QLabel("Empaque:"), row, 0)
-                pe_layout.addWidget(QLabel(section_data['tipo_empaque']), row, 1)
-            
-            pe_group.setLayout(pe_layout)
-            section_layout.addWidget(pe_group)
-        
-        # Contextura Física
-        if 'espalda' in section_data or 'abdomen' in section_data:
-            contextura_group = QGroupBox("Contextura Física")
-            contextura_layout = QGridLayout()
-            
-            row = 0
-            if 'espalda' in section_data:
-                contextura_layout.addWidget(QLabel("Espalda:"), row, 0)
-                contextura_layout.addWidget(QLabel(section_data['espalda']), row, 1)
-                row += 1
-            if 'abdomen' in section_data:
-                contextura_layout.addWidget(QLabel("Abdomen:"), row, 0)
-                contextura_layout.addWidget(QLabel(section_data['abdomen']), row, 1)
-            
-            contextura_group.setLayout(contextura_layout)
-            section_layout.addWidget(contextura_group)
+            cuello_layout.addWidget(QLabel("NO"), alignment=Qt.AlignmentFlag.AlignCenter)
+        right_layout.addWidget(cuello_group)
+
+        main_content_layout.addLayout(right_layout)
+        section_layout.addLayout(main_content_layout)
         
         # Observaciones
-        if 'observaciones' in section_data:
+        if section_data.get('observaciones'):
             obs_group = QGroupBox("Observaciones")
-            obs_layout = QVBoxLayout()
+            obs_layout = QVBoxLayout(obs_group)
             obs_layout.addWidget(QLabel(section_data['observaciones']))
-            obs_group.setLayout(obs_layout)
             section_layout.addWidget(obs_group)
         
-        section_group.setLayout(section_layout)
         return section_group
     
     def create_saco_section(self):
@@ -458,279 +431,231 @@ class ViewOrderScreen(QWidget):
         section_group = QGroupBox("MEDIDAS SACO")
         section_layout = QVBoxLayout()
         
-        # Medidas Básicas
-        medidas_group = QGroupBox("Medidas")
-        medidas_layout = QGridLayout()
-        
-        medidas = [
-            'talle', 'largo', 'media_espalda', 'hombro', 'manga',
-            'pecho', 'cintura', 'cadera'
-        ]
-        
-        row, col = 0, 0
-        for medida in medidas:
-            if medida in section_data:
-                medidas_layout.addWidget(QLabel(f"{medida.replace('_', ' ').title()}:"), row, col*2)
-                medidas_layout.addWidget(QLabel(section_data[medida]), row, col*2+1)
-                col = (col + 1) % 3
-                if col == 0:
-                    row += 1
-        
-        medidas_group.setLayout(medidas_layout)
-        section_layout.addWidget(medidas_group)
+        main_grid = QGridLayout()
+
+        # Medidas Saco
+        medidas_group = self.create_data_group(
+            "Medidas Saco",
+            section_data,
+            ['Talle', 'Largo', '1/2 espalda', 'Hombro', 'Manga', 'Pecho', 'Cintura', 'Cadera']
+        )
+        main_grid.addWidget(medidas_group, 0, 0)
         
         # Estilo
-        estilo_value = section_data.get('estilo', '')
-        estilo_group = QGroupBox("Estilo")
-        estilo_layout = QVBoxLayout()
-        
-        if estilo_value:
-            estilo_svg_path = self.get_svg_path('saco', 'estilo', estilo_value)
-            estilo_svg = self.create_svg_widget(estilo_svg_path, (200, 200))
-            if estilo_svg:
-                estilo_layout.addWidget(estilo_svg, alignment=Qt.AlignCenter)
-            estilo_layout.addWidget(QLabel(estilo_value), alignment=Qt.AlignCenter)
-            
-            if 'cant_boton' in section_data:
-                estilo_layout.addWidget(QLabel(f"Cant. Botón: {section_data['cant_boton']}"))
-        
-        estilo_group.setLayout(estilo_layout)
-        section_layout.addWidget(estilo_group)
-        
+        estilo_group = self.create_image_display_group(
+            "Estilo", 'saco', 'estilo', section_data,
+            field_name='Estilo',
+            additional_fields={'Cant. Botón': 'cantidad_boton'}
+        )
+        main_grid.addWidget(estilo_group, 0, 1)
+
         # Solapa
-        solapa_value = section_data.get('solapa', '')
-        solapa_group = QGroupBox("Solapa")
-        solapa_layout = QVBoxLayout()
-        
-        if solapa_value:
-            solapa_svg_path = self.get_svg_path('saco', 'solapa', solapa_value)
-            solapa_svg = self.create_svg_widget(solapa_svg_path, (150, 150))
-            if solapa_svg:
-                solapa_layout.addWidget(solapa_svg, alignment=Qt.AlignCenter)
-            solapa_layout.addWidget(QLabel(solapa_value), alignment=Qt.AlignCenter)
-            
-            if 'ojal_solapa' in section_data:
-                solapa_layout.addWidget(QLabel(f"Ojal Solapa: {'Sí' if section_data['ojal_solapa'].lower() == 'true' else 'No'}"))
-        
-        solapa_group.setLayout(solapa_layout)
-        section_layout.addWidget(solapa_group)
+        solapa_group = self.create_image_display_group(
+            "Solapa", 'saco', 'solapa', section_data,
+            field_name='Solapa',
+            additional_fields={'Ojal Solapa': 'ojal_solapa'}
+        )
+        main_grid.addWidget(solapa_group, 0, 2)
         
         # Bolsillo Inferior
-        bolsillo_inf_value = section_data.get('bolsillo_inferior', '')
-        bolsillo_inf_group = QGroupBox("Bolsillo Inferior")
-        bolsillo_inf_layout = QVBoxLayout()
-        
-        if bolsillo_inf_value:
-            bolsillo_inf_svg_path = self.get_svg_path('saco', 'bolsillo_inferior', bolsillo_inf_value)
-            bolsillo_inf_svg = self.create_svg_widget(bolsillo_inf_svg_path, (150, 150))
-            if bolsillo_inf_svg:
-                bolsillo_inf_layout.addWidget(bolsillo_inf_svg, alignment=Qt.AlignCenter)
-            bolsillo_inf_layout.addWidget(QLabel(bolsillo_inf_value), alignment=Qt.AlignCenter)
-        
-        bolsillo_inf_group.setLayout(bolsillo_inf_layout)
-        section_layout.addWidget(bolsillo_inf_group)
-        
+        bolsillo_inf_group = self.create_image_display_group(
+            "Bolsillo Inferior", 'saco', 'bolsillo_inferior', section_data,
+            field_name='Bolsillo Inferior'
+        )
+        main_grid.addWidget(bolsillo_inf_group, 1, 0)
+
         # Bolsillo Superior
-        bolsillo_sup_value = section_data.get('bolsillo_superior', '')
-        bolsillo_sup_group = QGroupBox("Bolsillo Superior")
-        bolsillo_sup_layout = QVBoxLayout()
-        
-        if bolsillo_sup_value:
-            if bolsillo_sup_value.lower() == 'no':
-                bolsillo_sup_layout.addWidget(QLabel("NO"), alignment=Qt.AlignCenter)
-            else:
-                bolsillo_sup_svg_path = self.get_svg_path('saco', 'bolsillo_superior', bolsillo_sup_value)
-                bolsillo_sup_svg = self.create_svg_widget(bolsillo_sup_svg_path, (150, 150))
-                if bolsillo_sup_svg:
-                    bolsillo_sup_layout.addWidget(bolsillo_sup_svg, alignment=Qt.AlignCenter)
-                bolsillo_sup_layout.addWidget(QLabel(bolsillo_sup_value), alignment=Qt.AlignCenter)
-        
-        bolsillo_sup_group.setLayout(bolsillo_sup_layout)
-        section_layout.addWidget(bolsillo_sup_group)
-        
+        bolsillo_sup_group = self.create_image_display_group(
+            "Bolsillo Superior", 'saco', 'bolsillo_superior', section_data,
+            field_name='Bolsillo superior'
+        )
+        main_grid.addWidget(bolsillo_sup_group, 1, 1)
+
+        # Delantero
+        delantero_group = self.create_data_group("Delantero", section_data, ['Delantero'])
+        main_grid.addWidget(delantero_group, 1, 2)
+
+        # Abertura
+        abertura_group = self.create_data_group("Abertura", section_data, ['Abertura'])
+        main_grid.addWidget(abertura_group, 2, 0)
+
         # Modelo Chaleco
-        chaleco_value = section_data.get('modelo_chaleco', '')
-        chaleco_group = QGroupBox("Modelo Chaleco")
-        chaleco_layout = QVBoxLayout()
+        chaleco_group = self.create_image_display_group(
+            "Modelo Chaleco", 'saco', 'modelo_chaleco', section_data,
+            field_name='Modelo chaleco',
+            additional_fields={
+                'Diagonal Pecho': 'chaleco_diagonal_pecho',
+                'Centro': 'chaleco_centro',
+                'Largo Espalda': 'chaleco_largo_espalda',
+                'Observaciones': 'observaciones_chaleco'
+            }
+        )
+        main_grid.addWidget(chaleco_group, 2, 1)
+
+        # Vendedor
+        vendedor_group = self.create_data_group("Vendedor", section_data, ['vendedor'])
+        main_grid.addWidget(vendedor_group, 2, 2)
         
-        if chaleco_value:
-            if chaleco_value.lower() == 'no':
-                chaleco_layout.addWidget(QLabel("NO"), alignment=Qt.AlignCenter)
-            else:
-                chaleco_svg_path = self.get_svg_path('saco', 'modelo_chaleco', chaleco_value)
-                chaleco_svg = self.create_svg_widget(chaleco_svg_path, (200, 200))
-                if chaleco_svg:
-                    chaleco_layout.addWidget(chaleco_svg, alignment=Qt.AlignCenter)
-                chaleco_layout.addWidget(QLabel(chaleco_value), alignment=Qt.AlignCenter)
-                
-                # Medidas del chaleco
-                if 'diagonal_pecho' in section_data:
-                    chaleco_layout.addWidget(QLabel(f"Diagonal Pecho: {section_data['diagonal_pecho']}"))
-                if 'centro' in section_data:
-                    chaleco_layout.addWidget(QLabel(f"Centro: {section_data['centro']}"))
-                if 'largo_espalda' in section_data:
-                    chaleco_layout.addWidget(QLabel(f"Largo Espalda: {section_data['largo_espalda']}"))
-                if 'observaciones_chaleco' in section_data:
-                    chaleco_layout.addWidget(QLabel(f"Observaciones: {section_data['observaciones_chaleco']}"))
-        
-        chaleco_group.setLayout(chaleco_layout)
-        section_layout.addWidget(chaleco_group)
-        
-        # Observaciones
-        if 'observaciones' in section_data:
-            obs_group = QGroupBox("Observaciones")
+        section_layout.addLayout(main_grid)
+
+        # Observaciones Saco
+        if section_data.get('observaciones'):
+            obs_group = QGroupBox("Observaciones Saco")
             obs_layout = QVBoxLayout()
-            obs_layout.addWidget(QLabel(section_data['observaciones']))
+            obs_label = QLabel(section_data['observaciones'])
+            obs_label.setWordWrap(True)
+            obs_layout.addWidget(obs_label)
             obs_group.setLayout(obs_layout)
             section_layout.addWidget(obs_group)
-        
+
         section_group.setLayout(section_layout)
         return section_group
-    
+
+    def create_data_group(self, title, data, fields):
+        group = QGroupBox(title)
+        layout = QGridLayout()
+        
+        row = 0
+        for field in fields:
+            value = data.get(field)
+            if value:
+                label = field.replace('_', ' ').replace('media', '1/2').title()
+                layout.addWidget(QLabel(f"<b>{label}:</b>"), row, 0)
+                layout.addWidget(QLabel(str(value)), row, 1)
+                row += 1
+        
+        group.setLayout(layout)
+        return group
+
+    def create_image_display_group(self, title, section, field, data, field_name=None, additional_fields=None, svg_size=(150, 150)):
+        group = QGroupBox(title)
+        layout = QVBoxLayout()
+        group.setLayout(layout)
+
+        value = data.get(field_name or field)
+        
+        if not value or value.lower() == 'no':
+            layout.addWidget(QLabel("NO"), alignment=Qt.AlignmentFlag.AlignCenter)
+            return group
+
+        svg_lookup_value = value
+        display_value_label = True
+        if field == 'modelo_chaleco' and value.lower() in ['si', 'true']:
+            svg_lookup_value = 'Chaleco'
+            display_value_label = False
+
+        svg_path = self.get_svg_path(section, field, svg_lookup_value)
+        svg_widget = self.create_svg_widget(svg_path, size=svg_size)
+        
+        if svg_widget:
+            layout.addWidget(svg_widget, alignment=Qt.AlignmentFlag.AlignCenter)
+        
+        if display_value_label:
+            layout.addWidget(QLabel(value), alignment=Qt.AlignmentFlag.AlignCenter)
+        
+        if additional_fields:
+            for label, data_key in additional_fields.items():
+                if data_key in data and data[data_key]:
+                    field_value = data[data_key]
+                    display_value = field_value
+                    if isinstance(field_value, str) and field_value.lower() in ['true', 'false']:
+                        display_value = 'Sí' if field_value.lower() == 'true' else 'No'
+                    
+                    layout.addWidget(QLabel(f"<b>{label}:</b> {display_value}"), alignment=Qt.AlignmentFlag.AlignCenter)
+
+        return group
+
     def create_pantalon_section(self):
         """Create the pantalon section with all details"""
         section_data = self.order_data['details']['pantalon']
         section_group = QGroupBox("MEDIDAS PANTALON")
         section_layout = QVBoxLayout()
         
-        # Medidas Básicas
-        medidas_group = QGroupBox("Medidas")
-        medidas_layout = QGridLayout()
-        
-        medidas = [
-            'cintura', 'base', 'largo', 'pierna', 'rodilla',
-            'bota', 'tiro', 'cont_t'
-        ]
-        
-        row, col = 0, 0
-        for medida in medidas:
-            if medida in section_data:
-                medidas_layout.addWidget(QLabel(f"{medida.replace('_', ' ').title()}:"), row, col*2)
-                medidas_layout.addWidget(QLabel(section_data[medida]), row, col*2+1)
-                col = (col + 1) % 3
-                if col == 0:
-                    row += 1
-        
-        medidas_group.setLayout(medidas_layout)
-        section_layout.addWidget(medidas_group)
-        
+        main_grid = QGridLayout()
+
+        # Medidas
+        medidas_group = self.create_data_group(
+            "Medidas",
+            section_data,
+            ['CINTURA', 'BASE', 'LARGO', 'PIERNA', 'RODILLA', 'BOTA', 'TIRO', 'CONT T']
+        )
+        main_grid.addWidget(medidas_group, 0, 0, 2, 1)
+
         # Bolsillo Delantero
-        bolsillo_del_value = section_data.get('bolsillo_delantero', '')
-        bolsillo_del_group = QGroupBox("Bolsillo Delantero")
-        bolsillo_del_layout = QVBoxLayout()
-        
-        if bolsillo_del_value:
-            bolsillo_del_svg_path = self.get_svg_path('pantalon', 'bolsillo_delantero', bolsillo_del_value)
-            bolsillo_del_svg = self.create_svg_widget(bolsillo_del_svg_path, (150, 150))
-            if bolsillo_del_svg:
-                bolsillo_del_layout.addWidget(bolsillo_del_svg, alignment=Qt.AlignCenter)
-            bolsillo_del_layout.addWidget(QLabel(bolsillo_del_value), alignment=Qt.AlignCenter)
-        
-        bolsillo_del_group.setLayout(bolsillo_del_layout)
-        section_layout.addWidget(bolsillo_del_group)
-        
+        bolsillo_del_group = self.create_image_display_group(
+            "Bolsillo Delantero", 'pantalon', 'bolsillo_delantero', section_data,
+            field_name='Bolsillo Delantero'
+        )
+        main_grid.addWidget(bolsillo_del_group, 0, 1)
+
         # Bolsillo Trasero
-        bolsillo_tras_value = section_data.get('bolsillo_trasero', '')
-        bolsillo_tras_group = QGroupBox("Bolsillo Trasero")
-        bolsillo_tras_layout = QVBoxLayout()
+        bolsillo_tras_group = self.create_image_display_group(
+            "Bolsillo Trasero", 'pantalon', 'bolsillo_trasero', section_data,
+            field_name='Bolsillo Trasero'
+        )
+        main_grid.addWidget(bolsillo_tras_group, 0, 2)
         
-        if bolsillo_tras_value:
-            bolsillo_tras_svg_path = self.get_svg_path('pantalon', 'bolsillo_trasero', bolsillo_tras_value)
-            bolsillo_tras_svg = self.create_svg_widget(bolsillo_tras_svg_path, (150, 150))
-            if bolsillo_tras_svg:
-                bolsillo_tras_layout.addWidget(bolsillo_tras_svg, alignment=Qt.AlignCenter)
-            bolsillo_tras_layout.addWidget(QLabel(bolsillo_tras_value), alignment=Qt.AlignCenter)
-            
-            # Terminado del bolsillo trasero
-            terminado_layout = QGridLayout()
-            if 'boton_trasero' in section_data:
-                terminado_layout.addWidget(QLabel("Botón:"), 0, 0)
-                terminado_layout.addWidget(QLabel(section_data['boton_trasero']), 0, 1)
-            if 'oreja_trasero' in section_data:
-                terminado_layout.addWidget(QLabel("Oreja:"), 1, 0)
-                terminado_layout.addWidget(QLabel(section_data['oreja_trasero']), 1, 1)
-            if 'parche_trasero' in section_data:
-                terminado_layout.addWidget(QLabel("Parche:"), 2, 0)
-                terminado_layout.addWidget(QLabel(section_data['parche_trasero']), 2, 1)
-            if 'mod_trasero' in section_data:
-                terminado_layout.addWidget(QLabel("MOD#:"), 3, 0)
-                terminado_layout.addWidget(QLabel(section_data['mod_trasero']), 3, 1)
-            
-            if terminado_layout.count() > 0:
-                bolsillo_tras_layout.addLayout(terminado_layout)
-        
-        bolsillo_tras_group.setLayout(bolsillo_tras_layout)
-        section_layout.addWidget(bolsillo_tras_group)
-        
+        # Terminado Bolsillo Trasero
+        terminado_bolsillo_group = self.create_data_group(
+            "Terminado Bolsillo Trasero",
+            section_data,
+            ['terminado_bolsillo_trasero_boton', 'terminado_bolsillo_trasero_oreja', 'terminado_bolsillo_trasero_parche', 'terminado_bolsillo_trasero_parche_mod']
+        )
+        main_grid.addWidget(terminado_bolsillo_group, 1, 2)
+
         # Pretina
-        pretina_value = section_data.get('pretina', '')
-        pretina_group = QGroupBox("Pretina")
-        pretina_layout = QVBoxLayout()
-        
-        if pretina_value:
-            pretina_svg_path = self.get_svg_path('pantalon', 'pretina', pretina_value)
-            pretina_svg = self.create_svg_widget(pretina_svg_path, (150, 150))
-            if pretina_svg:
-                pretina_layout.addWidget(pretina_svg, alignment=Qt.AlignCenter)
-            pretina_layout.addWidget(QLabel(pretina_value), alignment=Qt.AlignCenter)
-            
-            # Detalles de la pretina
-            if 'boton_pretina' in section_data:
-                pretina_layout.addWidget(QLabel(f"Botón: {'Sí' if section_data['boton_pretina'].lower() == 'true' else 'No'}"))
-            if 'gancho_pretina' in section_data:
-                pretina_layout.addWidget(QLabel(f"Gancho: {'Sí' if section_data['gancho_pretina'].lower() == 'true' else 'No'}"))
-            if 'pasadores_pretina' in section_data:
-                pretina_layout.addWidget(QLabel(f"Pasadores: {section_data['pasadores_pretina']}"))
-        
-        pretina_group.setLayout(pretina_layout)
-        section_layout.addWidget(pretina_group)
-        
+        pretina_group = self.create_image_display_group(
+            "Pretina", 'pantalon', 'pretina', section_data,
+            field_name='Pretina',
+            additional_fields={
+                'Botón': 'boton_pretina',
+                'Gancho': 'gancho_pretina',
+                'Pasadores': 'pasadores_pretina'
+            }
+        )
+        main_grid.addWidget(pretina_group, 0, 3)
+
         # Forrado
-        if 'forrado' in section_data:
-            forrado_group = QGroupBox("Forrado")
-            forrado_layout = QVBoxLayout()
-            forrado_layout.addWidget(QLabel(section_data['forrado']))
-            forrado_group.setLayout(forrado_layout)
-            section_layout.addWidget(forrado_group)
-        
-        # Especial
-        if 'texto_especial' in section_data or 'relojera' in section_data:
-            especial_group = QGroupBox("Especial")
-            especial_layout = QGridLayout()
-            
-            row = 0
-            if 'texto_especial' in section_data:
-                especial_layout.addWidget(QLabel("Texto:"), row, 0)
-                especial_layout.addWidget(QLabel(section_data['texto_especial']), row, 1)
-                row += 1
-            if 'relojera' in section_data:
-                especial_layout.addWidget(QLabel("Relojera:"), row, 0)
-                especial_layout.addWidget(QLabel(section_data['relojera']), row, 1)
-            
-            especial_group.setLayout(especial_layout)
-            section_layout.addWidget(especial_group)
-        
-        # Bota
-        if 'bota' in section_data:
-            bota_group = QGroupBox("Bota")
-            bota_layout = QVBoxLayout()
-            bota_layout.addWidget(QLabel(section_data['bota']))
-            bota_group.setLayout(bota_layout)
-            section_layout.addWidget(bota_group)
+        forrado_group = self.create_data_group(
+            "Forrado",
+            section_data,
+            ['Forrado', 'forrado_opcion_1', 'forrado_opcion_2']
+        )
+        main_grid.addWidget(forrado_group, 1, 1)
+
+        # Otros
+        otros_group = self.create_data_group(
+            "Otros",
+            section_data,
+            ['Especial', 'Relojera', 'Bota']
+        )
+        main_grid.addWidget(otros_group, 2, 0)
         
         # Estilo Delantero
-        if 'estilo_delantero' in section_data:
-            estilo_group = QGroupBox("Estilo Delantero")
-            estilo_layout = QVBoxLayout()
-            estilo_layout.addWidget(QLabel(section_data['estilo_delantero']))
-            estilo_group.setLayout(estilo_layout)
-            section_layout.addWidget(estilo_group)
+        estilo_delantero_group = self.create_data_group(
+            "Estilo Delantero",
+            section_data,
+            ['estilo_delantero']
+        )
+        main_grid.addWidget(estilo_delantero_group, 2, 1)
+
+        # Vendedor
+        vendedor_group = self.create_data_group(
+            "Vendedor",
+            section_data,
+            ['vendedor']
+        )
+        main_grid.addWidget(vendedor_group, 2, 2)
+
+        section_layout.addLayout(main_grid)
         
         # Observaciones
-        if 'observaciones' in section_data:
+        if section_data.get('observaciones'):
             obs_group = QGroupBox("Observaciones")
             obs_layout = QVBoxLayout()
-            obs_layout.addWidget(QLabel(section_data['observaciones']))
+            obs_label = QLabel(section_data['observaciones'])
+            obs_label.setWordWrap(True)
+            obs_layout.addWidget(obs_label)
             obs_group.setLayout(obs_layout)
             section_layout.addWidget(obs_group)
         
