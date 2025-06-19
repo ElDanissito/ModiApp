@@ -70,8 +70,6 @@ class CreateOrderScreen(QWidget):
         header_layout.addWidget(QLabel("Fecha Entrega"), 0, 5)
         header_layout.addWidget(self.fecha_entrega_edit, 0, 6)
 
-        header_layout.addWidget(QLabel("<b>Ferdinand N° 0000</b>"), 0, 8, Qt.AlignRight)
-
         # Set stretch factors to distribute space
         header_layout.setColumnStretch(1, 4)  # Client field
         header_layout.setColumnStretch(4, 1)  # Spacer between dates
@@ -532,10 +530,6 @@ class CreateOrderScreen(QWidget):
         # Billing section
         billing_section = self.create_billing_section()
         content_layout.addWidget(billing_section)
-
-        # Update the order number label
-        self.order_number_label = QLabel(f"Ferdinand N° {self.order_number}")
-        content_layout.addWidget(self.order_number_label)
 
         # Add save button
         save_button = QPushButton("Guardar Orden")
@@ -1021,7 +1015,8 @@ class CreateOrderScreen(QWidget):
 
         order_info_layout = QVBoxLayout()
         order_info_layout.addWidget(QLabel("<b>ORDEN TRABAJO</b>"), alignment=Qt.AlignRight)
-        order_info_layout.addWidget(QLabel("<b>N° 0000</b>"), alignment=Qt.AlignRight)
+        #Colocar el order_number correspondiente en el label
+        order_info_layout.addWidget(QLabel(f"<b>N° {self.order_number}</b>"), alignment=Qt.AlignRight)
         order_info_layout.addWidget(QLabel("<b>NO VALIDO COMO FACTURA</b>"), alignment=Qt.AlignRight)
         header_layout.addLayout(order_info_layout)
         main_layout.addLayout(header_layout)

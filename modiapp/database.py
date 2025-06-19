@@ -188,6 +188,36 @@ class Database:
             print(f"Error getting order by number: {e}")
             return None
 
+    def update_order_status(self, order_id, new_status):
+        """Update the status of a specific order"""
+        try:
+            self.cursor.execute('''
+                UPDATE orders
+                SET status = ?
+                WHERE id = ?
+            ''', (new_status, order_id))
+            self.conn.commit()
+            return True
+        except sqlite3.Error as e:
+            print(f"Error updating order status: {e}")
+            self.conn.rollback()
+            return False
+
+    def delete_order(self, order_id):
+        """Deletes an order and all its details from the database."""
+        try:
+            # Foreign key constraints should handle cascading deletes if set up,
+            # but we delete explicitly from child tables for safety.
+            self.cursor.execute('DELETE FROM order_details WHERE order_id = ?', (order_id,))
+            self.cursor.execute('DELETE FROM order_references WHERE order_id = ?', (order_id,))
+            self.cursor.execute('DELETE FROM orders WHERE id = ?', (order_id,))
+            self.conn.commit()
+            return True
+        except sqlite3.Error as e:
+            print(f"Error deleting order: {e}")
+            self.conn.rollback()
+            return False
+
     def close(self):
         """Close the database connection"""
         self.conn.close() 
