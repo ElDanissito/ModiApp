@@ -23,8 +23,12 @@ class DashboardScreen(QWidget):
     def __init__(self, db):
         super().__init__()
         self.db = db
+        self.setObjectName("dashboard")
         self.layout = QVBoxLayout(self)
         self.setLayout(self.layout)
+        
+        # Aplicar estilos
+        self.apply_styles()
 
         # Header with Logo
         header_logo_layout = QHBoxLayout()
@@ -35,55 +39,75 @@ class DashboardScreen(QWidget):
         header_logo_layout.addStretch()
         self.layout.addLayout(header_logo_layout)
 
-        # Header
-        header_layout = QHBoxLayout()
-        self.layout.addLayout(header_layout)
-
+        # Filter Section
+        filter_widget = QWidget()
+        filter_widget.setObjectName("filterSection")
+        filter_layout = QHBoxLayout(filter_widget)
+        
         # Controls
         self.estado_combo = QComboBox()
         self.estado_combo.addItems(["Todos", "Pendiente", "Terminado"])
         self.estado_combo.currentTextChanged.connect(self.apply_filters)
-        header_layout.addWidget(self.estado_combo)
+        filter_layout.addWidget(QLabel("Estado:"))
+        filter_layout.addWidget(self.estado_combo)
 
         # Date range filters
-        date_filter_layout = QHBoxLayout()
-        date_filter_layout.addWidget(QLabel("Desde:"))
+        filter_layout.addWidget(QLabel("Desde:"))
         self.fecha_desde = QDateEdit(QDate.currentDate().addMonths(-1))
         self.fecha_desde.setCalendarPopup(True)
         self.fecha_desde.dateChanged.connect(self.apply_filters)
-        date_filter_layout.addWidget(self.fecha_desde)
+        filter_layout.addWidget(self.fecha_desde)
 
-        date_filter_layout.addWidget(QLabel("Hasta:"))
+        filter_layout.addWidget(QLabel("Hasta:"))
         self.fecha_hasta = QDateEdit(QDate.currentDate())
         self.fecha_hasta.setCalendarPopup(True)
         self.fecha_hasta.dateChanged.connect(self.apply_filters)
-        date_filter_layout.addWidget(self.fecha_hasta)
-        
-        header_layout.addLayout(date_filter_layout)
+        filter_layout.addWidget(self.fecha_hasta)
         
         self.buscar_input = QLineEdit()
         self.buscar_input.setPlaceholderText("Buscar por nombre del cliente")
         self.buscar_input.textChanged.connect(self.apply_filters)
-        header_layout.addWidget(self.buscar_input)
+        filter_layout.addWidget(QLabel("Buscar:"))
+        filter_layout.addWidget(self.buscar_input)
 
-        header_layout.addStretch()
+        filter_layout.addStretch()
 
-        self.crear_button = QPushButton("Crear")
+        self.crear_button = QPushButton("Crear Orden")
+        self.crear_button.setObjectName("createButton")
         self.crear_button.clicked.connect(self.show_create_order)
-        header_layout.addWidget(self.crear_button)
+        filter_layout.addWidget(self.crear_button)
+        
+        self.layout.addWidget(filter_widget)
 
         # Table
         self.table = QTableWidget()
+        self.table.setObjectName("ordersTable")
         self.table.setColumnCount(12)
         self.table.setHorizontalHeaderLabels([
             "Estado", "Fecha Orden", "Fecha entrega", "N°", "Cliente", 
             "Valor Orden", "Abono", "Saldo", "Descargar", "Cambiar Estado", "Ver", "Eliminar"
         ])
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        
+        header = self.table.horizontalHeader()
+        # Set default resize mode
+        for i in range(self.table.columnCount()):
+            if i == 4: # Cliente, make it stretch
+                header.setSectionResizeMode(i, QHeaderView.ResizeToContents.Stretch)
+            #elif i==5 or i==6 or i ==7 or i == 8 or i == 9 or i == 10 or i == 11:
+                #header.setSectionResizeMode(i, QHeaderView.ResizeToContents.Stretch)
+            else: # Other columns resize to content
+                header.setSectionResizeMode(i, QHeaderView.ResizeToContents)
+
+        self.table.setAlternatingRowColors(True)
         self.layout.addWidget(self.table)
 
         # Load initial data
         self.load_orders()
+
+    def apply_styles(self):
+        """Aplicar estilos CSS al dashboard"""
+        from ..styles import LIGHT_THEME_STYLES
+        self.setStyleSheet(LIGHT_THEME_STYLES)
 
     def apply_filters(self):
         """Apply all filters to the orders list"""
@@ -111,8 +135,15 @@ class DashboardScreen(QWidget):
         self.table.setRowCount(len(orders))
         
         for row, order in enumerate(orders):
-            # Status
-            self.table.setItem(row, 0, QTableWidgetItem(order['status']))
+            # Status with color coding
+            status_item = QTableWidgetItem(order['status'])
+            if order['status'] == 'Pendiente':
+                status_item.setBackground(Qt.yellow)
+                status_item.setForeground(Qt.black)
+            elif order['status'] == 'Terminado':
+                status_item.setBackground(Qt.green)
+                status_item.setForeground(Qt.black)
+            self.table.setItem(row, 0, status_item)
             
             # Dates
             self.table.setItem(row, 1, QTableWidgetItem(order['order_date']))
@@ -122,28 +153,70 @@ class DashboardScreen(QWidget):
             self.table.setItem(row, 3, QTableWidgetItem(order['order_number']))
             self.table.setItem(row, 4, QTableWidgetItem(order['client_name']))
             
-            # Financial info
-            self.table.setItem(row, 5, QTableWidgetItem(f"$ {order['order_value']:,}"))
-            self.table.setItem(row, 6, QTableWidgetItem(f"$ {order['deposit']:,}"))
-            saldo = order['order_value'] - order['deposit']
-            self.table.setItem(row, 7, QTableWidgetItem(f"$ {saldo:,}"))
+            # Financial info with formatting
+            valor_item = QTableWidgetItem(f"$ {order['order_value']:,}")
+            valor_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            self.table.setItem(row, 5, valor_item)
             
-            # Action buttons
-            download_btn = QPushButton("Descargar")
-            download_btn.clicked.connect(lambda checked, oid=order['id']: self.download_order(oid))
+            abono_item = QTableWidgetItem(f"$ {order['deposit']:,}")
+            abono_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            self.table.setItem(row, 6, abono_item)
+            
+            saldo = order['order_value'] - order['deposit']
+            saldo_item = QTableWidgetItem(f"$ {saldo:,}")
+            saldo_item.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            if saldo > 0:
+                saldo_item.setBackground(Qt.red)
+                saldo_item.setForeground(Qt.black)
+            self.table.setItem(row, 7, saldo_item)
+            
+            # Action buttons centered in their cells
+            download_btn = self.create_action_button(
+                "    📥 Descargar    ", 
+                "downloadButton", 
+                lambda checked, oid=order['id']: self.download_order(oid)
+            )
             self.table.setCellWidget(row, 8, download_btn)
             
-            change_status_btn = QPushButton("Cambiar Estado")
-            change_status_btn.clicked.connect(lambda checked, oid=order['id'], status=order['status']: self.change_order_status(oid, status))
+            change_status_btn = self.create_action_button(
+                "🔄 Cambiar", 
+                "changeStatusButton", 
+                lambda checked, oid=order['id'], status=order['status']: self.change_order_status(oid, status)
+            )
             self.table.setCellWidget(row, 9, change_status_btn)
             
-            view_btn = QPushButton("Ver")
-            view_btn.clicked.connect(lambda checked, oid=order['id']: self.view_order(oid))
+            view_btn = self.create_action_button(
+                "    👁 Ver    ", 
+                "viewButton", 
+                lambda checked, oid=order['id']: self.view_order(oid)
+            )
             self.table.setCellWidget(row, 10, view_btn)
 
-            delete_btn = QPushButton("Eliminar")
-            delete_btn.clicked.connect(lambda checked, oid=order['id'], onum=order['order_number']: self.delete_order(oid, onum))
+            delete_btn = self.create_action_button(
+                "    🗑 Eliminar    ", 
+                "deleteButton", 
+                lambda checked, oid=order['id'], onum=order['order_number']: self.delete_order(oid, onum)
+            )
             self.table.setCellWidget(row, 11, delete_btn)
+
+            # Set a fixed row height to ensure buttons fit well
+            self.table.setRowHeight(row, 45)
+
+    def create_action_button(self, text, object_name, on_click):
+        """Creates a styled QPushButton centered in a container widget."""
+        button = QPushButton(text)
+        button.setObjectName(object_name)
+        button.setProperty("class", "small")
+        button.clicked.connect(on_click)
+
+        container = QWidget()
+        layout = QHBoxLayout(container)
+        layout.addWidget(button)
+        layout.setAlignment(Qt.AlignCenter)
+        layout.setContentsMargins(0, 0, 0, 0)
+        
+        
+        return container
 
     def show_create_order(self):
         """Show the create order screen"""

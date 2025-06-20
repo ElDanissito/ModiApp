@@ -25,10 +25,14 @@ class CreateOrderScreen(QWidget):
         super().__init__()
         self.db = db
         self.setWindowTitle("Crear Orden")
+        self.setObjectName("createOrderScreen")
         self.resize(1200, 800)
         
         # Get next order number
         self.order_number = self.db.get_next_order_number()
+        
+        # Aplicar estilos
+        self.apply_styles()
         
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
@@ -36,6 +40,7 @@ class CreateOrderScreen(QWidget):
 
         # Header with Back Button
         header_widget = QWidget()
+        header_widget.setObjectName("header")
         header_layout = QHBoxLayout(header_widget)
         
         logo_label = QLabel()
@@ -44,7 +49,8 @@ class CreateOrderScreen(QWidget):
         header_layout.addWidget(logo_label)
         header_layout.addStretch()
 
-        self.back_button = QPushButton("← Atras")
+        self.back_button = QPushButton("← Volver")
+        self.back_button.setObjectName("backButton")
         self.back_button.clicked.connect(self.close)
         header_layout.addWidget(self.back_button)
         main_layout.addWidget(header_widget)
@@ -56,17 +62,20 @@ class CreateOrderScreen(QWidget):
 
         # Main content widget
         self.content_widget = QWidget()
+        self.content_widget.setObjectName("contentArea")
         scroll_area.setWidget(self.content_widget)
 
         # Layout for the content widget
         content_layout = QVBoxLayout(self.content_widget)
         
         # Client and Date Header
-        header_group = QGroupBox()
+        header_group = QGroupBox("Información del Cliente")
+        header_group.setProperty("class", "section-header")
         header_layout = QGridLayout(header_group)
         
         header_layout.addWidget(QLabel("<b>Cliente:</b>"), 0, 0)
         self.cliente_name_edit = QLineEdit()
+        self.cliente_name_edit.setPlaceholderText("Nombre del cliente")
         header_layout.addWidget(self.cliente_name_edit, 0, 1)
 
         # Define date widgets before adding them to layout
@@ -98,18 +107,23 @@ class CreateOrderScreen(QWidget):
         main_sections_layout.addLayout(left_column_layout)
 
         camisa_group = QGroupBox("MEDIDAS CAMISA")
+        camisa_group.setProperty("class", "measurements")
         camisa_layout = QVBoxLayout(camisa_group)
         left_column_layout.addWidget(camisa_group)
 
         # Medidas
         medidas_camisa_layout = QGridLayout()
+        medidas_camisa_layout.setObjectName("measurements-grid")
         camisa_layout.addLayout(medidas_camisa_layout)
 
         fields = ["Cuello", "Espalda", "Hombro", "Manga x Cont.", "Largo", "Cont. manga", "Pecho", "Cintura", "Cadera"]
         self.camisa_measure_edits = {}
         for i, field in enumerate(fields):
-            medidas_camisa_layout.addWidget(QLabel(field), 0, i)
+            label = QLabel(field)
+            label.setProperty("class", "field-label")
+            medidas_camisa_layout.addWidget(label, 0, i)
             edit = QLineEdit()
+            edit.setPlaceholderText("0")
             medidas_camisa_layout.addWidget(edit, 1, i)
             field_name = field.lower().replace(' ', '_').replace('.', '').replace('x', 'por')
             self.camisa_measure_edits[field] = edit
@@ -120,9 +134,11 @@ class CreateOrderScreen(QWidget):
 
         # Modelo Espalda
         espalda_group = QGroupBox("Modelo Espalda")
+        espalda_group.setProperty("class", "models")
         espalda_main_layout = QVBoxLayout(espalda_group)
 
         espalda_grid_layout = QGridLayout()
+        espalda_grid_layout.setObjectName("models-grid")
         
         # Crear un grupo de botones de radio para que solo uno pueda ser seleccionado
         self.espalda_button_group = QButtonGroup()
@@ -139,6 +155,7 @@ class CreateOrderScreen(QWidget):
         for i, (img_file, name) in enumerate(espalda_options):
             # Contenedor para la imagen y el radio button
             option_container = QWidget()
+            option_container.setObjectName("svg-option")
             option_layout = QVBoxLayout(option_container)
             option_layout.setContentsMargins(0, 0, 0, 0)
             option_layout.setSpacing(5)
@@ -181,116 +198,77 @@ class CreateOrderScreen(QWidget):
 
         # Modelo Bolsillo
         bolsillo_group = QGroupBox("Modelo Bolsillo")
+        bolsillo_group.setProperty("class", "models")
         bolsillo_main_layout = QVBoxLayout(bolsillo_group)
         modelos_layout.addWidget(bolsillo_group)
 
+        # Grid for SVG options
         self.modelo_bolsillo_button_group = QButtonGroup()
         bolsillo_grid_layout = QGridLayout()
+        bolsillo_grid_layout.setObjectName("models-grid")
+        bolsillo_grid_layout.setSpacing(10)
         
         bolsillo_names = [
             "Fuelle #11", "En punta con\nTapa #5", "En Punta\nImitación Tapa #8",
             "En Punta Liso #1", "En Punta con\nDobles #4", "Diagonal Liso #2",
             "Diagonal Tableta #2", "Diagonal con\nTapa #13", "Redondo Liso #7",
             "Redondo con\nTapa #5", "Redondo Corte\nDespuntado #9", "Redondo Oreja\ncon Botón #10",
-            "Cuadrado #3"
+            "Cuadrado #3", "NO"
         ]
 
-        for i in range(13):
+        for i in range(14):
             option_container = QWidget()
+            option_container.setObjectName("svg-option")
             option_layout = QVBoxLayout(option_container)
-            option_layout.setContentsMargins(0,0,0,0)
+            option_layout.setContentsMargins(0, 0, 0, 0)
+            option_layout.setSpacing(5)
             
-            svg_widget = QSvgWidget(resource_path(f"docs/svgs/Modelo Bolsillo/{i+1}.svg"))
-            svg_widget.setFixedSize(60, 60)
+            # Widget para la imagen SVG
+            image_widget = QSvgWidget(resource_path(f"docs/svgs/Modelo Bolsillo/{i+1}.svg"))
+            image_widget.setFixedSize(60, 60)
             
-            rb = QRadioButton(bolsillo_names[i])
-            self.modelo_bolsillo_button_group.addButton(rb)
+            radio_button = QRadioButton(bolsillo_names[i])
+            self.modelo_bolsillo_button_group.addButton(radio_button)
+
+            option_layout.addWidget(image_widget, alignment=Qt.AlignCenter)
+            option_layout.addWidget(radio_button, alignment=Qt.AlignCenter)
             
-            option_layout.addWidget(svg_widget, alignment=Qt.AlignCenter)
-            option_layout.addWidget(rb, alignment=Qt.AlignCenter)
-            bolsillo_grid_layout.addWidget(option_container, i // 5, i % 5)
+            bolsillo_grid_layout.addWidget(option_container, i // 4, i % 4)
 
         bolsillo_main_layout.addLayout(bolsillo_grid_layout)
 
-        # Opciones adicionales de bolsillo
-        additional_bolsillo_layout = QHBoxLayout()
+        # Options below the grid, aligned to the right
+        bolsillo_options_layout = QHBoxLayout()
+        bolsillo_options_layout.addStretch() # Align to the right
+
+        # Lado del bolsillo
+        bolsillo_options_layout.addWidget(QLabel("Lado:"))
+        self.lado_bolsillo_combo = QComboBox()
+        self.lado_bolsillo_combo.addItems(["Izquierdo", "Derecho", "Ambos"])
+        bolsillo_options_layout.addWidget(self.lado_bolsillo_combo)
         
-        # Container for left-side options
-        left_options_container = QWidget()
-        left_options_layout = QHBoxLayout(left_options_container)
-        left_options_layout.setContentsMargins(0,0,0,0)
-        left_options_layout.setSpacing(5)
+        # Cantidad de bolsillos
+        bolsillo_options_layout.addWidget(QLabel("Cantidad:"))
+        self.cantidad_bolsillo_input = QLineEdit()
+        self.cantidad_bolsillo_input.setPlaceholderText("Ej: 1")
+        self.cantidad_bolsillo_input.setValidator(QIntValidator())
+        bolsillo_options_layout.addWidget(self.cantidad_bolsillo_input)
 
-        # Lado y Posición
-        lado_pos_group = QGroupBox("Lado y Posición")
-        lado_pos_layout = QHBoxLayout(lado_pos_group)
-        self.lado_bolsillo_group = QButtonGroup()
-        for text in ["Izq", "Der"]:
-            rb = QRadioButton(text)
-            self.lado_bolsillo_group.addButton(rb)
-            lado_pos_layout.addWidget(rb)
-        left_options_layout.addWidget(lado_pos_group)
+        bolsillo_main_layout.addLayout(bolsillo_options_layout)
 
-        # Cantidad
-        left_options_layout.addWidget(QLabel("Cant.:"))
-        self.cantidad_bolsillo_edit = QLineEdit()
-        self.cantidad_bolsillo_edit.setFixedWidth(70)
-        left_options_layout.addWidget(self.cantidad_bolsillo_edit)
+        # Connect signal to enable/disable pocket options
+        self.modelo_bolsillo_button_group.buttonClicked.connect(self.toggle_bolsillo_options)
         
-        additional_bolsillo_layout.addWidget(left_options_container)
-        additional_bolsillo_layout.addStretch()
-
-        # Opción NO
-        rb_no_bolsillo = QRadioButton("NO")
-        self.modelo_bolsillo_button_group.addButton(rb_no_bolsillo)
-        additional_bolsillo_layout.addWidget(rb_no_bolsillo)
-        
-        bolsillo_main_layout.addLayout(additional_bolsillo_layout)
-        
-        # Lógica para habilitar/deshabilitar
-        self.bolsillo_widgets_to_toggle = [left_options_container]
-
-        def toggle_bolsillo_options(button, checked):
-            # Deshabilitar si 'NO' está seleccionado
-            is_no_button = (button.text() == "NO")
-            if is_no_button and checked:
-                for widget in self.bolsillo_widgets_to_toggle:
-                    widget.setEnabled(False)
-                # Deseleccionar cualquier modelo de bolsillo si se selecciona NO
-                if self.modelo_bolsillo_button_group.checkedButton() and self.modelo_bolsillo_button_group.checkedButton().text() != "NO":
-                     self.modelo_bolsillo_button_group.setExclusive(False)
-                     self.modelo_bolsillo_button_group.checkedButton().setChecked(False)
-                     self.modelo_bolsillo_button_group.setExclusive(True)
-
-            # Habilitar si un modelo está seleccionado
-            elif not is_no_button and checked:
-                for widget in self.bolsillo_widgets_to_toggle:
-                    widget.setEnabled(True)
-
-        self.modelo_bolsillo_button_group.buttonToggled.connect(toggle_bolsillo_options)
-
-        # Estado inicial
-        rb_no_bolsillo.setChecked(True)
+        # Set initial state for pocket options (disabled)
+        self.lado_bolsillo_combo.setEnabled(False)
+        self.cantidad_bolsillo_input.setEnabled(False)
 
         # --- Modelo Puño y Cuello Layout ---
         puño_cuello_layout = QHBoxLayout()
 
         # --- Modelo Puño ---
         puño_group = QGroupBox("Modelo Puño")
-        puño_group.setStyleSheet("""
-            QGroupBox { 
-                background-color: #3C3C3C; 
-                color: white; 
-                border: 1px solid #555; 
-                border-radius: 5px; 
-                margin-top: 1ex;
-            }
-            QGroupBox::title { 
-                subcontrol-origin: margin; 
-                subcontrol-position: top center; 
-                padding: 0 3px; 
-            }
-        """)
+
         puño_main_layout = QHBoxLayout()
         
         # Textura Puño
@@ -299,7 +277,6 @@ class CreateOrderScreen(QWidget):
         self.textura_puno_button_group = QButtonGroup()
         for text in ["Rígido", "Normal", "Suave"]:
             rb = QRadioButton(text)
-            rb.setStyleSheet("color: white;")
             self.textura_puno_button_group.addButton(rb)
             textura_puño_layout.addWidget(rb)
         textura_puño_layout.addStretch()
@@ -324,7 +301,6 @@ class CreateOrderScreen(QWidget):
         
         self.ancho_input = QLineEdit()
         self.ancho_input.setPlaceholderText("ANCHO CMS.")
-        self.ancho_input.setStyleSheet("background-color: white; color: black;")
         puño_grid_layout.addWidget(self.ancho_input, 2, 1)
 
         manga_container = self.create_special_button("MANGA\nCORTA", self.modelo_puno_button_group)
@@ -336,20 +312,6 @@ class CreateOrderScreen(QWidget):
 
         # --- Modelo Cuello ---
         cuello_group = QGroupBox("Modelo Cuello")
-        cuello_group.setStyleSheet("""
-            QGroupBox { 
-                background-color: #3C3C3C; 
-                color: white; 
-                border: 1px solid #555; 
-                border-radius: 5px; 
-                margin-top: 1ex;
-            }
-            QGroupBox::title { 
-                subcontrol-origin: margin; 
-                subcontrol-position: top center; 
-                padding: 0 3px; 
-            }
-        """)
         cuello_main_layout = QHBoxLayout(cuello_group)
 
         # Textura Cuello
@@ -358,7 +320,6 @@ class CreateOrderScreen(QWidget):
         self.textura_cuello_button_group = QButtonGroup()
         for text in ["Rígido", "Normal", "Suave"]:
             rb = QRadioButton(text)
-            rb.setStyleSheet("color: white;")
             self.textura_cuello_button_group.addButton(rb)
             textura_cuello_layout.addWidget(rb)
         textura_cuello_layout.addStretch()
@@ -374,7 +335,6 @@ class CreateOrderScreen(QWidget):
         cuello_options_col1 = ["Pegasso", "Valentino C", "Crown", "Givenchy", "Pajarito"]
         for row, text in enumerate(cuello_options_col1):
             rb = QRadioButton(text)
-            rb.setStyleSheet("color: white;")
             self.modelo_cuello_button_group.addButton(rb)
             cuello_grid_layout.addWidget(rb, row, 0)
 
@@ -382,7 +342,6 @@ class CreateOrderScreen(QWidget):
         cuello_options_col2 = ["Valentino L", "Neru", "Royal"]
         for row, text in enumerate(cuello_options_col2):
             rb = QRadioButton(text)
-            rb.setStyleSheet("color: white;")
             self.modelo_cuello_button_group.addButton(rb)
             cuello_grid_layout.addWidget(rb, row, 1)
 
@@ -391,12 +350,10 @@ class CreateOrderScreen(QWidget):
         # Opción "OTRO - CUAL?"
         otro_layout = QHBoxLayout()
         self.rb_otro_cuello = QRadioButton("OTRO - CUAL?")
-        self.rb_otro_cuello.setStyleSheet("color: white;")
         self.modelo_cuello_button_group.addButton(self.rb_otro_cuello)
         otro_layout.addWidget(self.rb_otro_cuello)
 
         self.otro_cuello_input = QLineEdit()
-        self.otro_cuello_input.setStyleSheet("background-color: white; color: black;")
         self.otro_cuello_input.setPlaceholderText("Especificar otro modelo")
         self.otro_cuello_input.setEnabled(False)  # Deshabilitado por defecto
         otro_layout.addWidget(self.otro_cuello_input)
@@ -550,6 +507,7 @@ class CreateOrderScreen(QWidget):
 
     def create_svg_radio_button(self, svg_path, text, button_group):
         container = QWidget()
+        container.setObjectName("svg-option")
         layout = QVBoxLayout(container)
         layout.setContentsMargins(5, 5, 5, 5)
         layout.setSpacing(5)
@@ -558,7 +516,6 @@ class CreateOrderScreen(QWidget):
         image_widget.setFixedSize(80, 60)
         
         radio_button = QRadioButton(text)
-        radio_button.setStyleSheet("color: white;")
         button_group.addButton(radio_button)
 
         layout.addWidget(image_widget, alignment=Qt.AlignCenter)
@@ -567,6 +524,7 @@ class CreateOrderScreen(QWidget):
 
     def create_special_button(self, text, button_group):
         container = QWidget()
+        container.setObjectName("svg-option")
         layout = QVBoxLayout(container)
         layout.setContentsMargins(5, 5, 5, 5)
         layout.setSpacing(5)
@@ -574,10 +532,8 @@ class CreateOrderScreen(QWidget):
         label = QLabel(text)
         label.setFixedSize(80, 60)
         label.setAlignment(Qt.AlignCenter)
-        label.setStyleSheet("border: 1px solid white; color: white;")
         
         radio_button = QRadioButton(text.replace("\n", " "))
-        radio_button.setStyleSheet("color: white;")
         button_group.addButton(radio_button)
 
         layout.addWidget(label, alignment=Qt.AlignCenter)
@@ -1124,7 +1080,9 @@ class CreateOrderScreen(QWidget):
         self.add_reference_row()
         
         # Add button for new references
+
         add_ref_button = QPushButton("+")
+        add_ref_button.setObjectName("addReferenceButton")
         add_ref_button.setFixedWidth(30)
         add_ref_button.clicked.connect(self.add_reference_row)
         ref_layout.addWidget(add_ref_button, alignment=Qt.AlignCenter)
@@ -1167,6 +1125,7 @@ class CreateOrderScreen(QWidget):
         # Add delete button if not one of the first two rows
         if len(self.ref_rows) >= 2:
             delete_button = QPushButton("×")
+            delete_button.setObjectName("deleteReferenceButton")
             delete_button.setFixedWidth(20)
             delete_button.clicked.connect(lambda: self.delete_reference_row(row_widget))
             row_layout.addWidget(delete_button)
@@ -1274,9 +1233,9 @@ class CreateOrderScreen(QWidget):
             modelo = self.modelo_bolsillo_button_group.checkedButton().text()
             details['modelo_bolsillo'] = modelo
             if modelo != "NO":
-                if self.lado_bolsillo_group.checkedButton():
-                    details['lado_bolsillo'] = self.lado_bolsillo_group.checkedButton().text()
-                details['cantidad_bolsillo'] = self.cantidad_bolsillo_edit.text()
+                if self.lado_bolsillo_combo.currentText():
+                    details['lado_bolsillo'] = self.lado_bolsillo_combo.currentText()
+                details['cantidad_bolsillo'] = self.cantidad_bolsillo_input.text()
         
         # 4. Modelo Puño
         if self.modelo_puno_button_group.checkedButton():
@@ -1433,11 +1392,25 @@ class CreateOrderScreen(QWidget):
 
         return details
 
+    def apply_styles(self):
+        """Aplicar estilos CSS a la pantalla de creación de órdenes"""
+        from ..styles import LIGHT_THEME_STYLES
+        self.setStyleSheet(LIGHT_THEME_STYLES)
+
+    def toggle_bolsillo_options(self, button):
+        """
+        Enable or disable the side and quantity options for the pocket
+        based on whether the 'NO' option is selected.
+        """
+        is_no_selected = (button.text() == "NO")
+        self.lado_bolsillo_combo.setEnabled(not is_no_selected)
+        self.cantidad_bolsillo_input.setEnabled(not is_no_selected)
+
 class QIntValidator(QValidator):
-    def validate(self, input, pos):
-        if not input or input.isdigit():
-            return (QValidator.Acceptable, input, pos)
-        return (QValidator.Invalid, input, pos)
+    def validate(self, input_str, pos):
+        if not input_str or input_str.isdigit():
+            return (QValidator.Acceptable, input_str, pos)
+        return (QValidator.Invalid, input_str, pos)
 
     def fixup(self, input):
         return "".join(filter(str.isdigit, input))

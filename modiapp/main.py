@@ -33,9 +33,22 @@ class MainWindow(QApplication):
         # Set application icon
         self.setWindowIcon(QIcon(resource_path("modiapp/assets/favicon.ico")))
         
+        # Aplicar estilos globales
+        self.apply_global_styles()
+        
         # Create and show dashboard
         self.dashboard = DashboardScreen(self.db)
         self.dashboard.showMaximized()
+
+    def apply_global_styles(self):
+        """Aplicar estilos globales a toda la aplicación"""
+        from styles import LIGHT_THEME_STYLES
+        
+        # Aplicar estilos base a toda la aplicación
+        self.setStyleSheet(LIGHT_THEME_STYLES)
+        
+        # Configurar la aplicación para usar el modo claro por defecto
+        self.setStyle("Fusion")  # Usar el estilo Fusion que es más moderno
 
 def main():
     app = MainWindow(sys.argv)

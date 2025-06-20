@@ -24,8 +24,17 @@ class ViewOrderScreen(QWidget):
         self.order_id = order_id
         self.order_data = self.db.get_order_details(order_id)
         self.svg_base_path = resource_path("docs/svgs")
+        self.setObjectName("viewOrderScreen")
+        
+        # Aplicar estilos
+        self.apply_styles()
         
         self.init_ui()
+    
+    def apply_styles(self):
+        """Aplicar estilos CSS a la pantalla de ver orden"""
+        from ..styles import LIGHT_THEME_STYLES
+        self.setStyleSheet(LIGHT_THEME_STYLES)
     
     def get_svg_path(self, section, field, value):
         """Get the appropriate SVG path based on section, field and value"""
@@ -159,6 +168,7 @@ class ViewOrderScreen(QWidget):
         header_layout = QHBoxLayout()
         
         back_button = QPushButton("← Volver")
+        back_button.setObjectName("backButton")
         back_button.clicked.connect(self.close)
         header_layout.addWidget(back_button)
         
@@ -173,6 +183,7 @@ class ViewOrderScreen(QWidget):
         # Order Info
         order_info = self.order_data['order']
         info_group = QGroupBox("Información de la Orden")
+        info_group.setProperty("class", "order-info")
         info_layout = QGridLayout()
         
         info_layout.addWidget(QLabel("<b>Número de Orden:</b>"), 0, 0)
@@ -188,7 +199,12 @@ class ViewOrderScreen(QWidget):
         info_layout.addWidget(QLabel(order_info['delivery_date']), 3, 1)
         
         info_layout.addWidget(QLabel("<b>Estado:</b>"), 4, 0)
-        info_layout.addWidget(QLabel(order_info['status']), 4, 1)
+        status_label = QLabel(order_info['status'])
+        if order_info['status'] == 'Pendiente':
+            status_label.setStyleSheet("color: #d97706; font-weight: bold;")
+        elif order_info['status'] == 'Terminado':
+            status_label.setStyleSheet("color: #059669; font-weight: bold;")
+        info_layout.addWidget(status_label, 4, 1)
         
         if order_info.get('vendedor'):
             info_layout.addWidget(QLabel("<b>Vendedor:</b>"), 5, 0)
@@ -199,17 +215,30 @@ class ViewOrderScreen(QWidget):
         
         # Financial Info
         financial_group = QGroupBox("Información Financiera")
+        financial_group.setProperty("class", "financial-info")
         financial_layout = QGridLayout()
         
+        valor = order_info['order_value']
+        abono = order_info['deposit']
+        saldo = valor - abono
+        
         financial_layout.addWidget(QLabel("<b>Valor de la Orden:</b>"), 0, 0)
-        financial_layout.addWidget(QLabel(f"$ {order_info['order_value']:,}"), 0, 1)
+        valor_label = QLabel(f"$ {valor:,}")
+        valor_label.setProperty("class", "money")
+        financial_layout.addWidget(valor_label, 0, 1)
         
         financial_layout.addWidget(QLabel("<b>Abono:</b>"), 1, 0)
-        financial_layout.addWidget(QLabel(f"$ {order_info['deposit']:,}"), 1, 1)
+        abono_label = QLabel(f"$ {abono:,}")
+        abono_label.setProperty("class", "money")
+        financial_layout.addWidget(abono_label, 1, 1)
         
-        saldo = order_info['order_value'] - order_info['deposit']
         financial_layout.addWidget(QLabel("<b>Saldo:</b>"), 2, 0)
-        financial_layout.addWidget(QLabel(f"$ {saldo:,}"), 2, 1)
+        saldo_label = QLabel(f"$ {saldo:,}")
+        if saldo > 0:
+            saldo_label.setProperty("class", "money-negative")
+        else:
+            saldo_label.setProperty("class", "money")
+        financial_layout.addWidget(saldo_label, 2, 1)
         
         financial_group.setLayout(financial_layout)
         main_layout.addWidget(financial_group)
