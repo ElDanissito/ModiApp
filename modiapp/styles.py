@@ -459,6 +459,15 @@ QWidget#filterSection {
     padding: 15px;
     margin-bottom: 15px;
 }
+
+QPushButton#abonoButton {
+    background-color: #059669; /* Verde (éxito) */
+    color: white;
+}
+
+QPushButton#abonoButton:hover {
+    background-color: #047857; /* Verde más oscuro */
+}
 """
 
 # Interpolar los estilos

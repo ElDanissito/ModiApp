@@ -224,7 +224,7 @@ class Database:
             return False
 
     def delete_order(self, order_id):
-        """Deletes an order and all its details from the database."""
+        """Deletes an order and all its related details."""
         try:
             # Foreign key constraints should handle cascading deletes if set up,
             # but we delete explicitly from child tables for safety.
@@ -234,10 +234,19 @@ class Database:
             self.conn.commit()
             return True
         except sqlite3.Error as e:
-            print(f"Error deleting order: {e}")
-            self.conn.rollback()
+            print(f"Database error during deletion: {e}")
+            return False
+
+    def update_order_deposit(self, order_id, new_deposit):
+        """Updates the deposit for a given order."""
+        try:
+            self.cursor.execute("UPDATE orders SET deposit = ? WHERE id = ?", (new_deposit, order_id))
+            self.conn.commit()
+            return True
+        except sqlite3.Error as e:
+            print(f"Database error: {e}")
             return False
 
     def close(self):
-        """Close the database connection"""
+        """Closes the database connection."""
         self.conn.close() 
