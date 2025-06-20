@@ -5,6 +5,17 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from PySide6.QtSvgWidgets import QSvgWidget
 import os
+import sys
+
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class ViewOrderScreen(QWidget):
     def __init__(self, db, order_id):
@@ -12,7 +23,7 @@ class ViewOrderScreen(QWidget):
         self.db = db
         self.order_id = order_id
         self.order_data = self.db.get_order_details(order_id)
-        self.svg_base_path = "docs/svgs"
+        self.svg_base_path = resource_path("docs/svgs")
         
         self.init_ui()
     
@@ -152,7 +163,7 @@ class ViewOrderScreen(QWidget):
         header_layout.addWidget(back_button)
         
         logo_label = QLabel()
-        pixmap = QPixmap("modiapp/assets/Logo.png")
+        pixmap = QPixmap(resource_path("modiapp/assets/Logo.png"))
         logo_label.setPixmap(pixmap.scaledToWidth(250))
         header_layout.addWidget(logo_label)
         header_layout.addStretch()

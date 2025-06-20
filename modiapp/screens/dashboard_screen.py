@@ -3,10 +3,21 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QTableWidget, QTableWidgetI
                              QLineEdit, QDateEdit, QLabel, QMessageBox, QFileDialog)
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import QDate, Qt, Signal
-from screens.create_order_screen import CreateOrderScreen
-from screens.view_order_screen import ViewOrderScreen
+from .create_order_screen import CreateOrderScreen
+from .view_order_screen import ViewOrderScreen
 from fpdf import FPDF
 import os
+import sys
+
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class DashboardScreen(QWidget):
     def __init__(self, db):
@@ -18,7 +29,7 @@ class DashboardScreen(QWidget):
         # Header with Logo
         header_logo_layout = QHBoxLayout()
         logo_label = QLabel()
-        pixmap = QPixmap("modiapp/assets/Logo.png")
+        pixmap = QPixmap(resource_path("modiapp/assets/Logo.png"))
         logo_label.setPixmap(pixmap.scaledToWidth(250))
         header_logo_layout.addWidget(logo_label)
         header_logo_layout.addStretch()
@@ -160,7 +171,7 @@ class DashboardScreen(QWidget):
             pdf.set_font("Arial", size=8)        # Letra más pequeña
 
             # Logo
-            logo_path = "modiapp/assets/Logo.png"
+            logo_path = resource_path("modiapp/assets/Logo.png")
             if os.path.exists(logo_path):
                 pdf.image(logo_path, x=10, y=10, w=30)
             pdf.set_xy(45, 10)

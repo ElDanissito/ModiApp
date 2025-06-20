@@ -9,9 +9,9 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
     sys.path.insert(0, current_dir)
 
-# Import modules
-from screens.dashboard_screen import DashboardScreen
-from database import Database
+# Import modules from modiapp package
+from modiapp.screens.dashboard_screen import DashboardScreen
+from modiapp.database import Database
 
 def resource_path(relative_path):
     """Get absolute path to resource, works for dev and for PyInstaller"""

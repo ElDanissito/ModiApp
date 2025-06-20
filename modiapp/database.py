@@ -1,17 +1,37 @@
 import sqlite3
 from datetime import datetime
 import os
+import sys
 
 class Database:
     def __init__(self):
-        self.conn = sqlite3.connect('data/orders.db')
+        # Get the directory where the executable or script is located
+        if getattr(sys, 'frozen', False):
+            # Running as compiled executable
+            base_path = os.path.dirname(sys.executable)
+        else:
+            # Running as script
+            base_path = os.path.dirname(os.path.abspath(__file__))
+        
+        # Create data directory in the same location as the executable/script
+        data_dir = os.path.join(base_path, 'data')
+        os.makedirs(data_dir, exist_ok=True)
+        
+        db_path = os.path.join(data_dir, 'orders.db')
+        self.conn = sqlite3.connect(db_path)
         self.cursor = self.conn.cursor()
         self.create_tables()
 
     def create_tables(self):
         """Initialize the database and create tables if they don't exist"""
-            # Create data directory if it doesn't exist
-        os.makedirs(os.path.dirname('data/orders.db'), exist_ok=True)
+        # Create data directory if it doesn't exist
+        if getattr(sys, 'frozen', False):
+            base_path = os.path.dirname(sys.executable)
+        else:
+            base_path = os.path.dirname(os.path.abspath(__file__))
+        
+        data_dir = os.path.join(base_path, 'data')
+        os.makedirs(data_dir, exist_ok=True)
         
         # Tabla de órdenes
         self.cursor.execute('''

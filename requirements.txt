@@ -1,3 +1,3 @@
-PySide6
-FPDF2
-pyinstaller
+PySide6>=6.5.0
+FPDF2>=2.7.0
+pyinstaller>=5.13.0

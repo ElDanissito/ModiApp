@@ -5,6 +5,18 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QScrollArea, QPushButton,
 from PySide6.QtSvgWidgets import QSvgWidget
 from PySide6.QtGui import QPixmap, QValidator
 from PySide6.QtCore import Qt, QDate, Signal
+import os
+import sys
+
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class CreateOrderScreen(QWidget):
     order_created = Signal()  # Signal to notify when an order is created
@@ -27,7 +39,7 @@ class CreateOrderScreen(QWidget):
         header_layout = QHBoxLayout(header_widget)
         
         logo_label = QLabel()
-        pixmap = QPixmap("modiapp/assets/Logo.png")
+        pixmap = QPixmap(resource_path("modiapp/assets/Logo.png"))
         logo_label.setPixmap(pixmap.scaledToWidth(250))
         header_layout.addWidget(logo_label)
         header_layout.addStretch()
@@ -132,7 +144,7 @@ class CreateOrderScreen(QWidget):
             option_layout.setSpacing(5)
             
             # Widget para la imagen SVG
-            image_widget = QSvgWidget(f"docs/svgs/Modelo Espalda/{img_file}")
+            image_widget = QSvgWidget(resource_path(f"docs/svgs/Modelo Espalda/{img_file}"))
             image_widget.setFixedSize(80, 80)
             
             radio_button = QRadioButton(name)
@@ -188,7 +200,7 @@ class CreateOrderScreen(QWidget):
             option_layout = QVBoxLayout(option_container)
             option_layout.setContentsMargins(0,0,0,0)
             
-            svg_widget = QSvgWidget(f"docs/svgs/Modelo Bolsillo/{i+1}.svg")
+            svg_widget = QSvgWidget(resource_path(f"docs/svgs/Modelo Bolsillo/{i+1}.svg"))
             svg_widget.setFixedSize(60, 60)
             
             rb = QRadioButton(bolsillo_names[i])
@@ -303,7 +315,7 @@ class CreateOrderScreen(QWidget):
         ]
 
         for img_file, text, row, col in puno_options:
-            container = self.create_svg_radio_button(f"docs/svgs/Modelo Puño/{img_file}", text, self.modelo_puno_button_group)
+            container = self.create_svg_radio_button(resource_path(f"docs/svgs/Modelo Puño/{img_file}"), text, self.modelo_puno_button_group)
             puño_grid_layout.addWidget(container, row, col)
 
         # Botones especiales
@@ -588,10 +600,10 @@ class CreateOrderScreen(QWidget):
         # Images layout
         images_layout = QHBoxLayout()
         images_layout.addStretch()
-        img_cruzado = QSvgWidget("docs/svgs/Medidas Saco/Estilo/Cruzado.svg")
+        img_cruzado = QSvgWidget(resource_path("docs/svgs/Medidas Saco/Estilo/Cruzado.svg"))
         img_cruzado.setFixedSize(100, 100)
         images_layout.addWidget(img_cruzado)
-        img_sencillo = QSvgWidget("docs/svgs/Medidas Saco/Estilo/Sencillo.svg")
+        img_sencillo = QSvgWidget(resource_path("docs/svgs/Medidas Saco/Estilo/Sencillo.svg"))
         img_sencillo.setFixedSize(100, 100)
         images_layout.addWidget(img_sencillo)
         images_layout.addStretch()
@@ -626,7 +638,7 @@ class CreateOrderScreen(QWidget):
 
         solapa_options = ["Cuadrada", "En punta", "Redonda"]
         for i, opt_text in enumerate(solapa_options):
-            opt = self.create_svg_radio_button(f"docs/svgs/Medidas Saco/Solapa/{opt_text}.svg", opt_text, self.solapa_saco_group)
+            opt = self.create_svg_radio_button(resource_path(f"docs/svgs/Medidas Saco/Solapa/{opt_text}.svg"), opt_text, self.solapa_saco_group)
             solapa_layout.addWidget(opt, 0, i)
         
         self.ojal_solapa_checkbox = QCheckBox("Ojal solapa")
@@ -648,7 +660,7 @@ class CreateOrderScreen(QWidget):
             ("3er\nBolsillo", "3er Bolsillo.svg")
         ]
         for i, (opt_text, img_file) in enumerate(bolsillo_inf_options):
-            opt = self.create_svg_radio_button(f"docs/svgs/Medidas Saco/Bolsillo inferior/{img_file}", opt_text, self.bolsillo_inf_saco_group)
+            opt = self.create_svg_radio_button(resource_path(f"docs/svgs/Medidas Saco/Bolsillo inferior/{img_file}"), opt_text, self.bolsillo_inf_saco_group)
             bolsillo_inf_layout.addWidget(opt, 0, i)
 
 
@@ -697,8 +709,8 @@ class CreateOrderScreen(QWidget):
         bolsillo_sup_options_container = QWidget()
         bolsillo_sup_options_layout = QHBoxLayout(bolsillo_sup_options_container)
 
-        aletilla_opt = self.create_svg_radio_button("docs/svgs/Medidas Saco/Bolsillo Superior/Aletilla.svg", "ALETILLA", self.bolsillo_sup_type_group)
-        parche_opt = self.create_svg_radio_button("docs/svgs/Medidas Saco/Bolsillo Superior/Parche.svg", "PARCHE", self.bolsillo_sup_type_group)
+        aletilla_opt = self.create_svg_radio_button(resource_path("docs/svgs/Medidas Saco/Bolsillo Superior/Aletilla.svg"), "ALETILLA", self.bolsillo_sup_type_group)
+        parche_opt = self.create_svg_radio_button(resource_path("docs/svgs/Medidas Saco/Bolsillo Superior/Parche.svg"), "PARCHE", self.bolsillo_sup_type_group)
         bolsillo_sup_options_layout.addWidget(aletilla_opt)
         bolsillo_sup_options_layout.addWidget(parche_opt)
         bolsillo_sup_layout.addWidget(bolsillo_sup_options_container)
@@ -728,7 +740,7 @@ class CreateOrderScreen(QWidget):
         left_chaleco_layout = QVBoxLayout()
         
         # SVG visualization
-        svg_widget = QSvgWidget("docs/svgs/Medidas Saco/Modelo chaleco/Chaleco.svg")
+        svg_widget = QSvgWidget(resource_path("docs/svgs/Medidas Saco/Modelo chaleco/Chaleco.svg"))
         svg_widget.setFixedSize(150, 150)
         left_chaleco_layout.addWidget(svg_widget, alignment=Qt.AlignCenter)
 
@@ -821,7 +833,7 @@ class CreateOrderScreen(QWidget):
             ("Texas #10", "Texas 10.svg"),("Texas #11", "Texas 11.svg"),("Texas #12", "Texas 12.svg")
         ]
         for i, (text, svg) in enumerate(delantero_options):
-            opt = self.create_svg_radio_button(f"docs/svgs/Medidas Pantalon/Bolsillo Delantero/{svg}", text, self.bolsillo_del_group)
+            opt = self.create_svg_radio_button(resource_path(f"docs/svgs/Medidas Pantalon/Bolsillo Delantero/{svg}"), text, self.bolsillo_del_group)
             bolsillo_del_layout.addWidget(opt, i // 6, i % 6)
 
         # Bolsillo Trasero and Terminado Layout
@@ -837,7 +849,7 @@ class CreateOrderScreen(QWidget):
             ("Aletilla", "Aletilla.svg"),("Con Oreja", "Con oreja.svg")
         ]
         for i, (text, svg) in enumerate(trasero_options):
-            opt = self.create_svg_radio_button(f"docs/svgs/Medidas Pantalon/Bolsillo Trasero/{svg}", text, self.bolsillo_tras_group)
+            opt = self.create_svg_radio_button(resource_path(f"docs/svgs/Medidas Pantalon/Bolsillo Trasero/{svg}"), text, self.bolsillo_tras_group)
             bolsillo_tras_layout.addWidget(opt, i // 4, i % 4)
         
         terminado_group = QGroupBox("Terminado Bolsillo Trasero")
@@ -896,7 +908,7 @@ class CreateOrderScreen(QWidget):
             ("Cruzada\nRecta", "Cruzada recta.svg"), ("Cruzada\nPunta", "Cruzada punta.svg")
         ]
         for i, (text, svg) in enumerate(pretina_options):
-             opt = self.create_svg_radio_button(f"docs/svgs/Medidas Pantalon/Pretina/{svg}", text, self.pretina_modelos_group)
+             opt = self.create_svg_radio_button(resource_path(f"docs/svgs/Medidas Pantalon/Pretina/{svg}"), text, self.pretina_modelos_group)
              pretina_modelos_layout.addWidget(opt, 0, i)
         pretina_layout.addWidget(pretina_modelos_group)
         pretina_opts_group = QGroupBox()
@@ -998,7 +1010,7 @@ class CreateOrderScreen(QWidget):
         header_layout = QHBoxLayout()
         
         logo_label = QLabel()
-        pixmap = QPixmap("modiapp/assets/Logo.png")
+        pixmap = QPixmap(resource_path("modiapp/assets/Logo.png"))
         logo_label.setPixmap(pixmap.scaledToWidth(200))
         header_layout.addWidget(logo_label)
         
