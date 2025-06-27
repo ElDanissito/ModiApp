@@ -180,7 +180,7 @@ QPushButton#deleteReferenceButton:hover {
 /* Estilos para QLineEdit */
 QLineEdit {
     background-color: white;
-    border: 1px solid var(--border-color);
+    border: 2px solid #90b4e0;
     border-radius: var(--radius-sm);
     padding: 6px 8px;
     color: var(--text-primary);
@@ -188,19 +188,22 @@ QLineEdit {
 }
 QLineEdit:focus {
     border-color: var(--primary-color);
+    border-width: 2px;
 }
 QLineEdit:hover {
-    border-color: var(--text-secondary);
+    border-color: #94a3b8;
+    border-width: 2px;
 }
 QLineEdit:disabled {
     background-color: var(--surface-color);
     color: var(--text-muted);
+    border-color: var(--border-color);
 }
 
 /* Estilos para QComboBox */
 QComboBox {
     background-color: white;
-    border: 1px solid var(--border-color);
+    border: 2px solid #90b4e0;
     border-radius: var(--radius-sm);
     padding: 6px 8px;
     color: var(--text-primary);
@@ -208,6 +211,7 @@ QComboBox {
 }
 QComboBox:hover, QComboBox:focus {
     border-color: var(--primary-color);
+    border-width: 2px;
 }
 QComboBox::drop-down {
     border: none;
@@ -230,7 +234,7 @@ QComboBox QAbstractItemView {
 /* Estilos para QDateEdit */
 QDateEdit {
     background-color: white;
-    border: 1px solid var(--border-color);
+    border: 2px solid #90b4e0;
     border-radius: var(--radius-sm);
     padding: 6px 8px;
     color: var(--text-primary);
@@ -238,6 +242,7 @@ QDateEdit {
 }
 QDateEdit:focus, QDateEdit:hover {
     border-color: var(--primary-color);
+    border-width: 2px;
 }
 QDateEdit::drop-down {
     border: none;
@@ -341,7 +346,7 @@ QLabel.section-title {
 QRadioButton::indicator, QCheckBox::indicator {
     width: 16px;
     height: 16px;
-    border: 2px solid var(--border-color);
+    border: 2px solid #90b4e0;
     background-color: white;
 }
 QRadioButton::indicator {
@@ -364,13 +369,14 @@ QCheckBox::indicator:checked {
 /* Estilos para QTextEdit */
 QTextEdit {
     background-color: white;
-    border: 1px solid var(--border-color);
+    border: 2px solid #90b4e0;
     border-radius: var(--radius-sm);
     padding: 8px;
     color: var(--text-primary);
 }
 QTextEdit:focus, QTextEdit:hover {
     border-color: var(--primary-color);
+    border-width: 2px;
 }
 
 /* Estilos para el header y content area */

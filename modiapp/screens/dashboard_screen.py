@@ -463,7 +463,8 @@ class DashboardScreen(QWidget):
                     ("Cintura", saco.get('Cintura')), ("Cadera", saco.get('Cadera')),
                     ("Estilo", saco.get('Estilo')), ("Cantidad Botón", saco.get('cantidad_boton')),
                     ("Solapa", saco.get('Solapa')), ("Ojal", 'Sí' if saco.get('ojal_solapa')=='True' else 'No'),
-                    ("Bolsillo Inferior", saco.get('bolsillo_inferior')), ("Bolsillo Superior", saco.get('bolsillo_superior')),
+                    ("Bolsillo Inferior 1", saco.get('Bolsillo Inferior 1')), ("Bolsillo Inferior 2", saco.get('Bolsillo Inferior 2')),
+                    ("Bolsillo Superior", saco.get('bolsillo_superior')),
                     ("Delantero", saco.get('Delantero')), ("Abertura", saco.get('Abertura')),
                     ("Vendedor", saco.get('vendedor')),
                 ]

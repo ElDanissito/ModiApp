@@ -498,10 +498,43 @@ class ViewOrderScreen(QWidget):
         main_grid.addWidget(solapa_group, 0, 2)
         
         # Bolsillo Inferior
-        bolsillo_inf_group = self.create_image_display_group(
-            "Bolsillo Inferior", 'saco', 'bolsillo_inferior', section_data,
-            field_name='Bolsillo Inferior'
-        )
+        bolsillo_inf_group = QGroupBox("Bolsillo Inferior")
+        bolsillo_inf_layout = QVBoxLayout()
+        
+        # Mostrar hasta 2 bolsillos inferiores
+        bolsillo_1 = section_data.get('Bolsillo Inferior 1')
+        bolsillo_2 = section_data.get('Bolsillo Inferior 2')
+        
+        if bolsillo_1:
+            # Primer bolsillo
+            bolsillo_1_layout = QHBoxLayout()
+            bolsillo_1_layout.addWidget(QLabel("Bolsillo 1:"))
+            
+            svg_path_1 = self.get_svg_path('saco', 'bolsillo_inferior', bolsillo_1)
+            svg_widget_1 = self.create_svg_widget(svg_path_1, size=(100, 100))
+            if svg_widget_1:
+                bolsillo_1_layout.addWidget(svg_widget_1)
+            bolsillo_1_layout.addWidget(QLabel(bolsillo_1))
+            bolsillo_1_layout.addStretch()
+            bolsillo_inf_layout.addLayout(bolsillo_1_layout)
+        
+        if bolsillo_2:
+            # Segundo bolsillo
+            bolsillo_2_layout = QHBoxLayout()
+            bolsillo_2_layout.addWidget(QLabel("Bolsillo 2:"))
+            
+            svg_path_2 = self.get_svg_path('saco', 'bolsillo_inferior', bolsillo_2)
+            svg_widget_2 = self.create_svg_widget(svg_path_2, size=(100, 100))
+            if svg_widget_2:
+                bolsillo_2_layout.addWidget(svg_widget_2)
+            bolsillo_2_layout.addWidget(QLabel(bolsillo_2))
+            bolsillo_2_layout.addStretch()
+            bolsillo_inf_layout.addLayout(bolsillo_2_layout)
+        
+        if not bolsillo_1 and not bolsillo_2:
+            bolsillo_inf_layout.addWidget(QLabel("No especificado"), alignment=Qt.AlignmentFlag.AlignCenter)
+        
+        bolsillo_inf_group.setLayout(bolsillo_inf_layout)
         main_grid.addWidget(bolsillo_inf_group, 1, 0)
 
         # Bolsillo Superior

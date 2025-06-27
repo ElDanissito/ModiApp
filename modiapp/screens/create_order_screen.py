@@ -605,8 +605,9 @@ class CreateOrderScreen(QWidget):
         bolsillo_inf_group = QGroupBox("Bolsillo inferior")
         saco_section_layout.addWidget(bolsillo_inf_group)
         bolsillo_inf_layout = QGridLayout(bolsillo_inf_group)
-        self.bolsillo_inf_saco_group = QButtonGroup()
-
+        
+        # Crear checkboxes en lugar de radio buttons para permitir múltiples selecciones
+        self.bolsillo_inf_checkboxes = {}
         bolsillo_inf_options = [
             ("Ribete", "Ribete.svg"), 
             ("Aletilla", "Aletilla.svg"), 
@@ -615,34 +616,29 @@ class CreateOrderScreen(QWidget):
             ("Tapa\nCuadrada", "Tapa cuadrada.svg"), 
             ("3er\nBolsillo", "3er Bolsillo.svg")
         ]
+        
         for i, (opt_text, img_file) in enumerate(bolsillo_inf_options):
-            opt = self.create_svg_radio_button(resource_path(f"docs/svgs/Medidas Saco/Bolsillo inferior/{img_file}"), opt_text, self.bolsillo_inf_saco_group)
-            bolsillo_inf_layout.addWidget(opt, 0, i)
+            # Contenedor para la imagen y el checkbox
+            option_container = QWidget()
+            option_container.setObjectName("svg-option")
+            option_layout = QVBoxLayout(option_container)
+            option_layout.setContentsMargins(0, 0, 0, 0)
+            option_layout.setSpacing(5)
+            
+            # Widget para la imagen SVG
+            image_widget = QSvgWidget(resource_path(f"docs/svgs/Medidas Saco/Bolsillo inferior/{img_file}"))
+            image_widget.setFixedSize(80, 80)
+            
+            checkbox = QCheckBox(opt_text)
+            self.bolsillo_inf_checkboxes[opt_text] = checkbox
+            
+            # Conectar el checkbox para limitar a máximo 2 selecciones
+            checkbox.toggled.connect(self.limit_bolsillo_inf_selections)
 
-
-        # --- Delantero y Abertura ---
-        delantero_abertura_layout = QHBoxLayout()
-        saco_section_layout.addLayout(delantero_abertura_layout)
-
-        # Delantero
-        delantero_group = QGroupBox("Delantero")
-        delantero_abertura_layout.addWidget(delantero_group)
-        delantero_layout = QHBoxLayout(delantero_group)
-        self.delantero_group = QButtonGroup()
-        for text in ["RECTO", "CURVO"]:
-            rb = QRadioButton(text)
-            self.delantero_group.addButton(rb)
-            delantero_layout.addWidget(rb)
-
-        # Abertura Espalda
-        abertura_group = QGroupBox("Abertura Espalda")
-        delantero_abertura_layout.addWidget(abertura_group)
-        abertura_layout = QHBoxLayout(abertura_group)
-        self.abertura_group = QButtonGroup()
-        for text in ["NO", "UNA (1)", "DOS (2)"]:
-            rb = QRadioButton(text)
-            self.abertura_group.addButton(rb)
-            abertura_layout.addWidget(rb)
+            option_layout.addWidget(image_widget, alignment=Qt.AlignCenter)
+            option_layout.addWidget(checkbox, alignment=Qt.AlignCenter)
+            
+            bolsillo_inf_layout.addWidget(option_container, 0, i)
 
         # --- Bolsillo Superior ---
         bolsillo_sup_group = QGroupBox("Bolsillo Superior")
@@ -686,6 +682,43 @@ class CreateOrderScreen(QWidget):
                     self.bolsillo_sup_type_group.setExclusive(True)
 
         self.bolsillo_sup_enable_group.buttonClicked.connect(toggle_bolsillo_sup)
+
+        # --- Observaciones del Saco ---
+        observaciones_group = QGroupBox("Observaciones Saco")
+        obs_layout = QVBoxLayout(observaciones_group)
+        self.saco_observaciones_edit = QTextEdit()
+        obs_layout.addWidget(self.saco_observaciones_edit)
+        saco_section_layout.addWidget(observaciones_group)
+
+        vendedor_layout = QHBoxLayout()
+        vendedor_layout.addWidget(QLabel("Vendedor:"))
+        self.saco_vendedor_edit = QLineEdit()
+        vendedor_layout.addWidget(self.saco_vendedor_edit)
+        saco_section_layout.addLayout(vendedor_layout)
+
+        # --- Delantero y Abertura ---
+        delantero_abertura_layout = QHBoxLayout()
+        saco_section_layout.addLayout(delantero_abertura_layout)
+
+        # Delantero
+        delantero_group = QGroupBox("Delantero")
+        delantero_abertura_layout.addWidget(delantero_group)
+        delantero_layout = QHBoxLayout(delantero_group)
+        self.delantero_group = QButtonGroup()
+        for text in ["RECTO", "CURVO"]:
+            rb = QRadioButton(text)
+            self.delantero_group.addButton(rb)
+            delantero_layout.addWidget(rb)
+
+        # Abertura Espalda
+        abertura_group = QGroupBox("Abertura Espalda")
+        delantero_abertura_layout.addWidget(abertura_group)
+        abertura_layout = QHBoxLayout(abertura_group)
+        self.abertura_group = QButtonGroup()
+        for text in ["NO", "UNA (1)", "DOS (2)"]:
+            rb = QRadioButton(text)
+            self.abertura_group.addButton(rb)
+            abertura_layout.addWidget(rb)
 
         # --- Modelo Chaleco ---
         chaleco_group = QGroupBox("Modelo Chaleco")
@@ -736,7 +769,7 @@ class CreateOrderScreen(QWidget):
 
         # Observations
         obs_chaleco_layout = QVBoxLayout()
-        obs_chaleco_layout.addWidget(QLabel("Observaciones:"))
+        obs_chaleco_layout.addWidget(QLabel("Observaciones chaleco:"))
         self.obs_chaleco_edit = QTextEdit()
         obs_chaleco_layout.addWidget(self.obs_chaleco_edit)
         right_chaleco_layout.addLayout(obs_chaleco_layout)
@@ -755,19 +788,6 @@ class CreateOrderScreen(QWidget):
 
         # Initial state
         toggle_chaleco_options(rb_no_chaleco)
-
-        # --- Observaciones y Vendedor ---
-        observaciones_group = QGroupBox("Observaciones")
-        obs_layout = QVBoxLayout(observaciones_group)
-        self.saco_observaciones_edit = QTextEdit()
-        obs_layout.addWidget(self.saco_observaciones_edit)
-        saco_section_layout.addWidget(observaciones_group)
-
-        vendedor_layout = QHBoxLayout()
-        vendedor_layout.addWidget(QLabel("Vendedor:"))
-        self.saco_vendedor_edit = QLineEdit()
-        vendedor_layout.addWidget(self.saco_vendedor_edit)
-        saco_section_layout.addLayout(vendedor_layout)
 
         return saco_section_layout
 
@@ -1308,8 +1328,17 @@ class CreateOrderScreen(QWidget):
             details['Solapa'] = self.solapa_saco_group.checkedButton().text()
         details['ojal_solapa'] = self.ojal_solapa_checkbox.isChecked()
         
-        if self.bolsillo_inf_saco_group.checkedButton():
-            details['Bolsillo Inferior'] = self.bolsillo_inf_saco_group.checkedButton().text()
+        # Collect bolsillo inferior selections (máximo 2)
+        selected_bolsillos = []
+        for text, checkbox in self.bolsillo_inf_checkboxes.items():
+            if checkbox.isChecked():
+                selected_bolsillos.append(text)
+        
+        # Guardar hasta 2 bolsillos inferiores
+        if len(selected_bolsillos) >= 1:
+            details['Bolsillo Inferior 1'] = selected_bolsillos[0]
+        if len(selected_bolsillos) >= 2:
+            details['Bolsillo Inferior 2'] = selected_bolsillos[1]
         
         if self.delantero_group.checkedButton():
             details['Delantero'] = self.delantero_group.checkedButton().text()
@@ -1405,6 +1434,19 @@ class CreateOrderScreen(QWidget):
         is_no_selected = (button.text() == "NO")
         self.lado_bolsillo_combo.setEnabled(not is_no_selected)
         self.cantidad_bolsillo_input.setEnabled(not is_no_selected)
+
+    def limit_bolsillo_inf_selections(self, checked):
+        """Limita la selección de bolsillos inferiores a máximo 2"""
+        if checked:
+            # Contar cuántos están seleccionados
+            selected_count = sum(1 for checkbox in self.bolsillo_inf_checkboxes.values() if checkbox.isChecked())
+            
+            # Si ya hay más de 2 seleccionados, desmarcar el que se acaba de marcar
+            if selected_count > 2:
+                # Desmarcar el checkbox que se acaba de marcar
+                sender_checkbox = self.sender()
+                if sender_checkbox:
+                    sender_checkbox.setChecked(False)
 
 class QIntValidator(QValidator):
     def validate(self, input_str, pos):
