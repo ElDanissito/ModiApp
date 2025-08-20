@@ -133,18 +133,21 @@ class Database:
         if estado:
             query += " AND status = ?"
             params.append(estado)
-            
-        if fecha_desde:
-            query += " AND order_date >= ?"
-            params.append(fecha_desde)
-            
-        if fecha_hasta:
-            query += " AND order_date <= ?"
-            params.append(fecha_hasta)
-            
-        if search_text:
+        
+        # Si hay texto de búsqueda, IGNORAR completamente los filtros de fecha
+        if search_text and search_text.strip():
             query += " AND (client_name LIKE ? OR order_number LIKE ?)"
-            params.extend([f"%{search_text}%", f"%{search_text}%"])
+            params.extend([f"%{search_text.strip()}%", f"%{search_text.strip()}%"])
+            # NO aplicar filtros de fecha cuando hay búsqueda
+        else:
+            # Solo aplicar filtros de fecha cuando NO hay búsqueda
+            if fecha_desde:
+                query += " AND order_date >= ?"
+                params.append(fecha_desde)
+                
+            if fecha_hasta:
+                query += " AND order_date <= ?"
+                params.append(fecha_hasta)
             
         query += " ORDER BY order_date DESC LIMIT 20"
         

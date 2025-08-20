@@ -151,17 +151,20 @@ class DashboardScreen(QWidget):
         filter_layout.addWidget(QLabel("Desde:"))
         self.fecha_desde = QDateEdit(QDate.currentDate().addMonths(-1))
         self.fecha_desde.setCalendarPopup(True)
+        self.fecha_desde.setToolTip("Fecha desde la cual mostrar órdenes.\nSe ignora cuando buscas por nombre.")
         self.fecha_desde.dateChanged.connect(self.apply_filters)
         filter_layout.addWidget(self.fecha_desde)
 
         filter_layout.addWidget(QLabel("Hasta:"))
         self.fecha_hasta = QDateEdit(QDate.currentDate())
         self.fecha_hasta.setCalendarPopup(True)
+        self.fecha_hasta.setToolTip("Fecha hasta la cual mostrar órdenes.\nSe ignora cuando buscas por nombre.")
         self.fecha_hasta.dateChanged.connect(self.apply_filters)
         filter_layout.addWidget(self.fecha_hasta)
         
         self.buscar_input = QLineEdit()
         self.buscar_input.setPlaceholderText("Buscar por nombre del cliente")
+        self.buscar_input.setToolTip("Busca por nombre del cliente o número de orden.\nCuando buscas, las fechas se ignoran completamente.")
         self.buscar_input.textChanged.connect(self.apply_filters)
         filter_layout.addWidget(QLabel("Buscar:"))
         filter_layout.addWidget(self.buscar_input)
@@ -210,7 +213,17 @@ class DashboardScreen(QWidget):
         estado = self.estado_combo.currentText()
         fecha_desde = self.fecha_desde.date().toString("yyyy-MM-dd")
         fecha_hasta = self.fecha_hasta.date().toString("yyyy-MM-dd")
-        search_text = self.buscar_input.text()
+        search_text = self.buscar_input.text().strip()
+
+        # Si hay texto de búsqueda, mostrar indicador de que las fechas son opcionales
+        if search_text:
+            # Cambiar el estilo de las fechas para indicar que son opcionales
+            self.fecha_desde.setStyleSheet("QDateEdit { background-color: #f0f0f0; color: #666; }")
+            self.fecha_hasta.setStyleSheet("QDateEdit { background-color: #f0f0f0; color: #666; }")
+        else:
+            # Restaurar estilo normal
+            self.fecha_desde.setStyleSheet("")
+            self.fecha_hasta.setStyleSheet("")
 
         # Get filtered orders from database
         orders = self.db.get_filtered_orders(
