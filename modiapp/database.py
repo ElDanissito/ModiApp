@@ -237,6 +237,57 @@ class Database:
             print(f"Database error: {e}")
             return False
 
+    def update_order(self, order_id, data_package):
+        """Update an existing order with its details and references"""
+        try:
+            order_data = data_package['order_data']
+            details_data = data_package['details']
+            references = data_package['references']
+            
+            # Update the main order
+            self.cursor.execute('''
+                UPDATE orders SET
+                    order_number = ?, client_name = ?, order_date = ?, delivery_date = ?,
+                    order_value = ?, deposit = ?
+                WHERE id = ?
+            ''', (
+                order_data['order_number'],
+                order_data['client_name'],
+                order_data['order_date'],
+                order_data['delivery_date'],
+                order_data['order_value'],
+                order_data['deposit'],
+                order_id
+            ))
+            
+            # Delete existing details and references
+            self.cursor.execute('DELETE FROM order_details WHERE order_id = ?', (order_id,))
+            self.cursor.execute('DELETE FROM order_references WHERE order_id = ?', (order_id,))
+            
+            # Insert new details
+            for section, fields in details_data.items():
+                for field, value in fields.items():
+                    if value:  # Only insert non-empty values
+                        self.cursor.execute('''
+                            INSERT INTO order_details (order_id, section, field, value)
+                            VALUES (?, ?, ?, ?)
+                        ''', (order_id, section, field, str(value)))
+            
+            # Insert new references
+            for ref in references:
+                self.cursor.execute('''
+                    INSERT INTO order_references (order_id, reference, color, value)
+                    VALUES (?, ?, ?, ?)
+                ''', (order_id, ref['reference'], ref['color'], ref['value']))
+            
+            self.conn.commit()
+            return True
+            
+        except sqlite3.Error as e:
+            print(f"Error updating order: {e}")
+            self.conn.rollback()
+            return False
+
     def close(self):
         """Closes the database connection."""
         self.conn.close() 

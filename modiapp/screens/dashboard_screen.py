@@ -5,6 +5,7 @@ from PySide6.QtWidgets import (QWidget, QVBoxLayout, QTableWidget, QTableWidgetI
 from PySide6.QtGui import QPixmap, QIntValidator
 from PySide6.QtCore import QDate, Qt, Signal
 from .create_order_screen import CreateOrderScreen
+from .edit_order_screen import EditOrderScreen
 from .view_order_screen import ViewOrderScreen
 from fpdf import FPDF
 import os
@@ -181,10 +182,10 @@ class DashboardScreen(QWidget):
         # Table
         self.table = QTableWidget()
         self.table.setObjectName("ordersTable")
-        self.table.setColumnCount(13)
+        self.table.setColumnCount(14)
         self.table.setHorizontalHeaderLabels([
             "Estado", "Fecha Orden", "Fecha entrega", "N°", "Cliente", 
-            "Valor Orden", "Abono", "Saldo", "Abonar", "Descargar", "Cambiar Estado", "Ver", "Eliminar"
+            "Valor Orden", "Abono", "Saldo", "Abonar", "Editar", "Descargar", "Cambiar Estado", "Ver", "Eliminar"
         ])
         
         header = self.table.horizontalHeader()
@@ -287,33 +288,40 @@ class DashboardScreen(QWidget):
             )
             self.table.setCellWidget(row, 8, abono_btn)
 
+            edit_btn = self.create_action_button(
+                "    ✏️ Editar    ", 
+                "editButton", 
+                lambda checked, oid=order['id']: self.edit_order(oid)
+            )
+            self.table.setCellWidget(row, 9, edit_btn)
+
             download_btn = self.create_action_button(
                 "    📥 Descargar    ", 
                 "downloadButton", 
                 lambda checked, oid=order['id']: self.download_order(oid)
             )
-            self.table.setCellWidget(row, 9, download_btn)
+            self.table.setCellWidget(row, 10, download_btn)
             
             change_status_btn = self.create_action_button(
                 "  🔄 Cambiar  ", 
                 "changeStatusButton", 
                 lambda checked, oid=order['id'], status=order['status']: self.change_order_status(oid, status)
             )
-            self.table.setCellWidget(row, 10, change_status_btn)
+            self.table.setCellWidget(row, 11, change_status_btn)
             
             view_btn = self.create_action_button(
                 "    👁 Ver    ", 
                 "viewButton", 
                 lambda checked, oid=order['id']: self.view_order(oid)
             )
-            self.table.setCellWidget(row, 11, view_btn)
+            self.table.setCellWidget(row, 12, view_btn)
 
             delete_btn = self.create_action_button(
                 "    🗑    ", 
                 "deleteButton", 
                 lambda checked, oid=order['id'], onum=order['order_number']: self.delete_order(oid, onum)
             )
-            self.table.setCellWidget(row, 12, delete_btn)
+            self.table.setCellWidget(row, 13, delete_btn)
 
             # Set a fixed row height to ensure buttons fit well
             self.table.setRowHeight(row, 45)
@@ -339,6 +347,12 @@ class DashboardScreen(QWidget):
         self.create_order_screen = CreateOrderScreen(self.db)
         self.create_order_screen.showMaximized()
         self.create_order_screen.order_created.connect(self.load_orders)
+
+    def edit_order(self, order_id):
+        """Show the edit order screen"""
+        self.edit_order_screen = EditOrderScreen(self.db, order_id)
+        self.edit_order_screen.showMaximized()
+        self.edit_order_screen.order_updated.connect(self.load_orders)
 
     def show_abono_popup(self, order_id, order_value, current_deposit):
         """Shows a dialog to add a new deposit to an order."""
